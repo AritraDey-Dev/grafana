@@ -934,4 +934,8 @@ const (
 	// FlagPreferLibraryPanelTitle
 	// Prefer library panel title over viz panel title.
 	FlagPreferLibraryPanelTitle = "preferLibraryPanelTitle"
+
+	// FlagNewDataSourceConfigPageDesign
+	// Enables new design for data source configuration pages
+	FlagNewDataSourceConfigPageDesign = "newDataSourceConfigPageDesign"
 )

@@ -1032,4 +1032,9 @@ export interface FeatureToggles {
   * @default false
   */
   preferLibraryPanelTitle?: boolean;
+  /**
+  * Enables new design for data source configuration pages
+  * @default false
+  */
+  newDataSourceConfigPageDesign?: boolean;
 }
