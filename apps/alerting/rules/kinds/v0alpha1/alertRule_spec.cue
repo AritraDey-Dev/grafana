@@ -1,7 +1,7 @@
 package v0alpha1
 
-NoDataState:  *'NoData' | 'Ok' | 'Alerting' | 'KeepLast'
-ExecErrState: *'Error' | 'Ok' | 'Alerting' | 'KeepLast'
+NoDataState:  *"NoData" | "Ok" | "Alerting" | "KeepLast"
+ExecErrState: *"Error" | "Ok" | "Alerting" | "KeepLast"
 
 AlertRuleSpec: #RuleSpec & {
 	noDataState:  NoDataState
