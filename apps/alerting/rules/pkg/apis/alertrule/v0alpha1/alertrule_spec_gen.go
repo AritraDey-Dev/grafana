@@ -20,16 +20,17 @@ func NewQuery() *Query {
 
 // +k8s:openapi-gen=true
 type RelativeTimeRange struct {
-	// TODO(moustafab): duration
-	From string `json:"from"`
-	// ^
-	To string `json:"to"`
+	From Duration `json:"from"`
+	To   Duration `json:"to"`
 }
 
 // NewRelativeTimeRange creates a new RelativeTimeRange object.
 func NewRelativeTimeRange() *RelativeTimeRange {
 	return &RelativeTimeRange{}
 }
+
+// +k8s:openapi-gen=true
+type Duration string
 
 // +k8s:openapi-gen=true
 type Json map[string]*JsonOrArrayOfJsonOrStringOrBoolOrFloat64OrNull
@@ -59,13 +60,13 @@ type Spec struct {
 	Title  string           `json:"title"`
 	Paused *bool            `json:"paused,omitempty"`
 	Data   map[string]Query `json:"data"`
-	// TODO(moustafab): duration (min: 1s, max: heat death of universe)
-	Interval                    string                    `json:"interval"`
+	// TODO(moustafab): ensuring this converts to a valid duration may need to be done elsewhere for now
+	Interval                    Duration                  `json:"interval"`
 	NoDataState                 string                    `json:"noDataState"`
 	ExecErrState                string                    `json:"execErrState"`
 	NotificationSettings        []NotificationSettings    `json:"notificationSettings,omitempty"`
-	MissingSeriesEvalsToResolve *int64                    `json:"missingSeriesEvalsToResolve,omitempty"`
 	For                         string                    `json:"for"`
+	MissingSeriesEvalsToResolve *int64                    `json:"missingSeriesEvalsToResolve,omitempty"`
 	Labels                      map[string]TemplateString `json:"labels"`
 	Annotations                 map[string]TemplateString `json:"annotations"`
 }
