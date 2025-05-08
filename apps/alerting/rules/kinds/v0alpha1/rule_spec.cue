@@ -1,5 +1,7 @@
 package v0alpha1
 
+import "time"
+
 TemplateString: string // TODO(moustafab): better typing?
 
 #RuleSpec: {
@@ -8,7 +10,7 @@ TemplateString: string // TODO(moustafab): better typing?
 	data: {
 		[string]: #Query
 	}
-	interval: string // TODO(moustafab): duration (min: 1s, max: heat death of universe)
+	interval: time.Duration // TODO(moustafab): ensuring this converts to a valid duration may need to be done elsewhere for now
 	labels: {
 		[string]: TemplateString
 	}
@@ -20,8 +22,8 @@ TemplateString: string // TODO(moustafab): better typing?
 }
 
 #RelativeTimeRange: {
-	from: string // TODO(moustafab): duration
-	to:   string // ^
+	from: time.Duration
+	to:   time.Duration
 }
 
 #Query: {

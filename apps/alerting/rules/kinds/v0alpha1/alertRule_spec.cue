@@ -1,5 +1,7 @@
 package v0alpha1
 
+import "time"
+
 NoDataState:  *"NoData" | "Ok" | "Alerting" | "KeepLast"
 ExecErrState: *"Error" | "Ok" | "Alerting" | "KeepLast"
 
@@ -7,8 +9,8 @@ AlertRuleSpec: #RuleSpec & {
 	noDataState:  NoDataState
 	execErrState: ExecErrState
 	notificationSettings?: [...#NotificationSettings]
+	"for": time.Duration
 	missingSeriesEvalsToResolve?: int
-	"for":                        string // TODO(moustafab): duration
 	annotations: {
 		[string]: TemplateString
 	}
