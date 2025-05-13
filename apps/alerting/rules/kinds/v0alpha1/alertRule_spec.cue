@@ -1,7 +1,5 @@
 package v0alpha1
 
-import "time"
-
 NoDataState:  *"NoData" | "Ok" | "Alerting" | "KeepLast"
 ExecErrState: *"Error" | "Ok" | "Alerting" | "KeepLast"
 
@@ -9,7 +7,7 @@ AlertRuleSpec: #RuleSpec & {
 	noDataState:  NoDataState
 	execErrState: ExecErrState
 	notificationSettings?: [...#NotificationSettings]
-	"for": time.Duration
+	"for":                        string & #PromDuration
 	missingSeriesEvalsToResolve?: int
 	annotations: {
 		[string]: TemplateString
@@ -22,5 +20,5 @@ AlertRuleSpec: #RuleSpec & {
 	groupWait?:      string
 	groupInterval?:  string
 	repeatInterval?: string
-	muteTimeIntervals?: [...string] // TODO(moustafab): ref to other type?
+	muteTimeIntervals?: [...#MuteTimeIntervalRef]
 }

@@ -10,7 +10,7 @@ alertRule: {
 		groupOverride: "rules.alerting.grafana.app"
 	}
 	pluralName: "AlertRules"
-	current: "v0alpha1"
+	current:    "v0alpha1"
 	codegen: {
 		ts: {enabled: false}
 		go: {enabled: true}
