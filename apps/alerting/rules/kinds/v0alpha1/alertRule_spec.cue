@@ -1,7 +1,5 @@
 package v0alpha1
 
-import "time"
-
 NoDataState:  *"NoData" | "Ok" | "Alerting" | "KeepLast"
 ExecErrState: *"Error" | "Ok" | "Alerting" | "KeepLast"
 
