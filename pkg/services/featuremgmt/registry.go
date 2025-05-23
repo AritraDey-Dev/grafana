@@ -1774,7 +1774,7 @@ var (
 			Expression:  "false",
 		},
 		{
-			Name:         "newDataSourceConfigPageDesign",
+			Name:         "newInfluxDSConfigPageDesign",
 			Description:  "Enables new design for data source configuration pages",
 			Stage:        FeatureStagePrivatePreview,
 			FrontendOnly: false,
