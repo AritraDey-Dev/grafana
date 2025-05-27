@@ -936,6 +936,6 @@ const (
 	FlagPreferLibraryPanelTitle = "preferLibraryPanelTitle"
 
 	// FlagNewInfluxDSConfigPageDesign
-	// Enables new design for data source configuration pages
+	// Enables new design for the InfluxDB data source configuration page
 	FlagNewInfluxDSConfigPageDesign = "newInfluxDSConfigPageDesign"
 )
