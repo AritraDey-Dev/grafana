@@ -1,4 +1,3 @@
-import { useMemo } from 'react';
 
 import { useTranslate } from '@grafana/i18n';
 import { Alert } from '@grafana/ui';
@@ -6,17 +5,13 @@ import { GrafanaRuleGroupIdentifier } from 'app/types/unified-alerting';
 import { GrafanaPromRuleDTO, RulerGrafanaRuleDTO } from 'app/types/unified-alerting-dto';
 
 import { logWarning } from '../Analytics';
-import { alertRuleApi } from '../api/alertRuleApi';
 import { prometheusApi } from '../api/prometheusApi';
 import { RULE_LIST_POLL_INTERVAL_MS } from '../utils/constants';
-import { GrafanaRulesSource } from '../utils/datasource';
 
 import { GrafanaRuleListItem } from './GrafanaRuleLoader';
-import { RuleOperationListItem } from './components/AlertRuleListItem';
 import { AlertRuleListItemSkeleton } from './components/AlertRuleListItemLoader';
-import { RuleOperation } from './components/RuleListIcon';
 
-const { useGetGrafanaRulerGroupQuery } = alertRuleApi;
+// const { useGetGrafanaRulerGroupQuery } = alertRuleApi;
 const { useGetGrafanaGroupsQuery } = prometheusApi;
 
 export interface GrafanaGroupLoaderProps {
@@ -48,20 +43,20 @@ export function GrafanaGroupLoader({
     },
     { pollingInterval: RULE_LIST_POLL_INTERVAL_MS }
   );
-  const { data: rulerResponse, isLoading: isRulerGroupLoading } = useGetGrafanaRulerGroupQuery({
-    folderUid: groupIdentifier.namespace.uid,
-    groupName: groupIdentifier.groupName,
-  });
+  // const { data: rulerResponse, isLoading: isRulerGroupLoading } = useGetGrafanaRulerGroupQuery({
+  //   folderUid: groupIdentifier.namespace.uid,
+  //   groupName: groupIdentifier.groupName,
+  // });
 
-  const { matches, promOnlyRules } = useMemo(() => {
-    const promRules = promResponse?.data.groups.at(0)?.rules ?? [];
-    const rulerRules = rulerResponse?.rules ?? [];
+  // const { matches, promOnlyRules } = useMemo(() => {
+  //   const promRules = promResponse?.data.groups.at(0)?.rules ?? [];
+  //   const rulerRules = rulerResponse?.rules ?? [];
 
-    return matchRules(promRules, rulerRules);
-  }, [promResponse, rulerResponse]);
+  //   return matchRules(promRules, rulerRules);
+  // }, [promResponse, rulerResponse]);
   const { t } = useTranslate();
 
-  const isLoading = isPromResponseLoading || isRulerGroupLoading;
+  const isLoading = isPromResponseLoading;
   if (isLoading) {
     return (
       <>
@@ -72,7 +67,7 @@ export function GrafanaGroupLoader({
     );
   }
 
-  if (!rulerResponse || !promResponse) {
+  if (!promResponse) {
     return (
       <Alert
         title={t(
@@ -87,33 +82,39 @@ export function GrafanaGroupLoader({
 
   return (
     <>
-      {rulerResponse.rules.map((rulerRule) => {
-        const promRule = matches.get(rulerRule);
+      {promResponse.data.groups.at(0)?.rules.map((promRule) => {
+        // const promRule = matches.get(rulerRule);
 
-        if (!promRule) {
-          return (
-            <GrafanaRuleListItem
-              key={rulerRule.grafana_alert.uid}
-              rule={promRule}
-              rulerRule={rulerRule}
-              groupIdentifier={groupIdentifier}
-              namespaceName={namespaceName}
-              operation={RuleOperation.Creating}
-            />
-          );
-        }
+        // if (!promRule) {
+        //   return (
+        //     <Alert
+        //       title={t('alerting.group-loader.rule-load-failed', 'Failed to load rule {{ ruleName }}', {
+        //         ruleName: promRule
+        //       })}
+        //       severity="error"
+        //     />
+        //     // <GrafanaRuleListItem
+        //     //   key={rulerRule.grafana_alert.uid}
+        //     //   rule={promRule}
+        //     //   rulerRule={rulerRule}
+        //     //   groupIdentifier={groupIdentifier}
+        //     //   namespaceName={namespaceName}
+        //     //   operation={RuleOperation.Creating}
+        //     // />
+        //   );
+        // }
 
         return (
           <GrafanaRuleListItem
             key={promRule.uid}
             rule={promRule}
-            rulerRule={rulerRule}
+            // rulerRule={rulerRule}
             groupIdentifier={groupIdentifier}
             namespaceName={namespaceName}
           />
         );
       })}
-      {promOnlyRules.map((rule) => (
+      {/* {promOnlyRules.map((rule) => (
         <RuleOperationListItem
           key={rule.uid}
           name={rule.name}
@@ -123,7 +124,7 @@ export function GrafanaGroupLoader({
           application="grafana"
           operation={RuleOperation.Deleting}
         />
-      ))}
+      ))} */}
     </>
   );
 }
