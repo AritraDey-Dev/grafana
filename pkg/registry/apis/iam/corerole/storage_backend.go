@@ -19,52 +19,52 @@ import (
 )
 
 var (
-	_ rest.Scoper               = (*GrafanaRestStorage)(nil)
-	_ rest.SingularNameProvider = (*GrafanaRestStorage)(nil)
-	_ rest.Getter               = (*GrafanaRestStorage)(nil)
-	_ rest.Lister               = (*GrafanaRestStorage)(nil)
-	_ rest.Storage              = (*GrafanaRestStorage)(nil)
+	_ rest.Scoper               = (*RegistryStorage)(nil)
+	_ rest.SingularNameProvider = (*RegistryStorage)(nil)
+	_ rest.Getter               = (*RegistryStorage)(nil)
+	_ rest.Lister               = (*RegistryStorage)(nil)
+	_ rest.Storage              = (*RegistryStorage)(nil)
 )
 
-type GrafanaRestStorage struct{}
+type RegistryStorage struct{}
 
 // Destroy implements rest.Storage.
-func (s *GrafanaRestStorage) Destroy() {
+func (s *RegistryStorage) Destroy() {
 	panic("unimplemented")
 }
 
 // New implements rest.Storage.
-func (s *GrafanaRestStorage) New() runtime.Object {
+func (s *RegistryStorage) New() runtime.Object {
 	panic("unimplemented")
 }
 
 // ConvertToTable implements rest.Lister.
-func (s *GrafanaRestStorage) ConvertToTable(ctx context.Context, object runtime.Object, tableOptions runtime.Object) (*v1.Table, error) {
+func (s *RegistryStorage) ConvertToTable(ctx context.Context, object runtime.Object, tableOptions runtime.Object) (*v1.Table, error) {
 	panic("unimplemented")
 }
 
 // List implements rest.Lister.
-func (s *GrafanaRestStorage) List(ctx context.Context, options *internalversion.ListOptions) (runtime.Object, error) {
+func (s *RegistryStorage) List(ctx context.Context, options *internalversion.ListOptions) (runtime.Object, error) {
 	panic("unimplemented")
 }
 
 // NewList implements rest.Lister.
-func (s *GrafanaRestStorage) NewList() runtime.Object {
+func (s *RegistryStorage) NewList() runtime.Object {
 	panic("unimplemented")
 }
 
 // Get implements rest.Getter.
-func (s *GrafanaRestStorage) Get(ctx context.Context, name string, options *v1.GetOptions) (runtime.Object, error) {
+func (s *RegistryStorage) Get(ctx context.Context, name string, options *v1.GetOptions) (runtime.Object, error) {
 	panic("unimplemented")
 }
 
 // GetSingularName implements rest.SingularNameProvider.
-func (s *GrafanaRestStorage) GetSingularName() string {
+func (s *RegistryStorage) GetSingularName() string {
 	panic("unimplemented")
 }
 
 // NamespaceScoped implements rest.Scoper.
-func (s *GrafanaRestStorage) NamespaceScoped() bool {
+func (s *RegistryStorage) NamespaceScoped() bool {
 	panic("unimplemented")
 }
 
