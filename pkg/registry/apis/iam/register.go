@@ -137,7 +137,8 @@ func (b *IdentityAccessManagementAPIBuilder) UpdateAPIGroupInfo(apiGroupInfo *ge
 	if b.enableAuthZResources {
 		// v0alpha1
 		coreRoleResource := iamv0b.CoreRoleInfo
-		storage[coreRoleResource.StoragePath()] = corerole.NewLegacyStore(b.store, b.accessClient)
+		// TODO
+		storage[coreRoleResource.StoragePath()] = &corerole.RegistryStorage{}
 	}
 
 	apiGroupInfo.VersionedResourcesStorageMap[iamv0.VERSION] = storage
