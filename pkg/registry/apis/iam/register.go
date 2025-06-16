@@ -4,6 +4,7 @@ import (
 	"context"
 	"strings"
 
+	"github.com/prometheus/client_golang/prometheus"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/schema"
@@ -37,9 +38,16 @@ var _ builder.APIGroupRouteProvider = (*IdentityAccessManagementAPIBuilder)(nil)
 
 // This is used just so wire has something unique to return
 type IdentityAccessManagementAPIBuilder struct {
-	store        legacy.LegacyIdentityStore
-	authorizer   authorizer.Authorizer
+	store      legacy.LegacyIdentityStore
+	authorizer authorizer.Authorizer
+	// legacyAccessClient is used for the identity apis, we need to migrate to the access client
+	legacyAccessClient types.AccessClient
+	// accessClient is used for the core role apis
 	accessClient types.AccessClient
+
+	dbProvider legacysql.LegacyDatabaseProvider
+
+	reg prometheus.Registerer
 
 	// non-k8s api route
 	display *user.LegacyDisplayREST
@@ -57,14 +65,16 @@ func RegisterAPIService(
 	sql db.DB,
 	ac accesscontrol.AccessControl,
 ) (*IdentityAccessManagementAPIBuilder, error) {
-	store := legacy.NewLegacySQLStores(legacysql.NewDatabaseProvider(sql))
+	dbProvider := legacysql.NewDatabaseProvider(sql)
+	store := legacy.NewLegacySQLStores(dbProvider)
 	authorizer, client := newLegacyAuthorizer(ac, store)
 
 	builder := &IdentityAccessManagementAPIBuilder{
 		store:                store,
+		dbProvider:           dbProvider,
 		sso:                  ssoService,
 		authorizer:           authorizer,
-		accessClient:         client,
+		legacyAccessClient:   client,
 		display:              user.NewLegacyDisplayREST(store),
 		enableAuthZResources: features.IsEnabledGlobally(featuremgmt.FlagKubernetesAuthzApis),
 	}
@@ -111,22 +121,22 @@ func (b *IdentityAccessManagementAPIBuilder) InstallSchema(scheme *runtime.Schem
 	return scheme.SetVersionPriority(iamv0.SchemeGroupVersion)
 }
 
-func (b *IdentityAccessManagementAPIBuilder) UpdateAPIGroupInfo(apiGroupInfo *genericapiserver.APIGroupInfo, _ builder.APIGroupOptions) error {
+func (b *IdentityAccessManagementAPIBuilder) UpdateAPIGroupInfo(apiGroupInfo *genericapiserver.APIGroupInfo, opts builder.APIGroupOptions) error {
 	storage := map[string]rest.Storage{}
 
 	teamResource := iamv0.TeamResourceInfo
-	storage[teamResource.StoragePath()] = team.NewLegacyStore(b.store, b.accessClient)
+	storage[teamResource.StoragePath()] = team.NewLegacyStore(b.store, b.legacyAccessClient)
 	storage[teamResource.StoragePath("members")] = team.NewLegacyTeamMemberREST(b.store)
 
 	teamBindingResource := iamv0.TeamBindingResourceInfo
 	storage[teamBindingResource.StoragePath()] = team.NewLegacyBindingStore(b.store)
 
 	userResource := iamv0.UserResourceInfo
-	storage[userResource.StoragePath()] = user.NewLegacyStore(b.store, b.accessClient)
+	storage[userResource.StoragePath()] = user.NewLegacyStore(b.store, b.legacyAccessClient)
 	storage[userResource.StoragePath("teams")] = user.NewLegacyTeamMemberREST(b.store)
 
 	serviceAccountResource := iamv0.ServiceAccountResourceInfo
-	storage[serviceAccountResource.StoragePath()] = serviceaccount.NewLegacyStore(b.store, b.accessClient)
+	storage[serviceAccountResource.StoragePath()] = serviceaccount.NewLegacyStore(b.store, b.legacyAccessClient)
 	storage[serviceAccountResource.StoragePath("tokens")] = serviceaccount.NewLegacyTokenREST(b.store)
 
 	if b.sso != nil {
@@ -138,7 +148,18 @@ func (b *IdentityAccessManagementAPIBuilder) UpdateAPIGroupInfo(apiGroupInfo *ge
 		// v0alpha1
 		coreRoleResource := iamv0b.CoreRoleInfo
 		// TODO
-		storage[coreRoleResource.StoragePath()] = &corerole.RegistryStorage{}
+		// TODO wrong accessClient
+		store, err := corerole.NewStore(
+			coreRoleResource,
+			apiGroupInfo.Scheme,
+			opts.OptsGetter,
+			b.reg, b.accessClient,
+			b.dbProvider,
+		)
+		if err != nil {
+			return err
+		}
+		storage[coreRoleResource.StoragePath()] = store
 	}
 
 	apiGroupInfo.VersionedResourcesStorageMap[iamv0.VERSION] = storage

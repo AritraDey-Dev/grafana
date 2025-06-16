@@ -5,73 +5,65 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
+	"sync"
 
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
-	"k8s.io/apimachinery/pkg/apis/meta/internalversion"
-	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
-	"k8s.io/apiserver/pkg/registry/rest"
+	"k8s.io/apiserver/pkg/registry/generic"
 
+	"github.com/grafana/authlib/types"
+	iamv0alpha1 "github.com/grafana/grafana/apps/iam/pkg/apis/iam/v0alpha1"
+	"github.com/grafana/grafana/pkg/apimachinery/utils"
+	grafanaregistry "github.com/grafana/grafana/pkg/apiserver/registry/generic"
+	grafanarest "github.com/grafana/grafana/pkg/apiserver/rest"
+	"github.com/grafana/grafana/pkg/registry/apis/dashboard/legacy"
 	"github.com/grafana/grafana/pkg/registry/apis/iam/common"
 	"github.com/grafana/grafana/pkg/storage/legacysql"
+	"github.com/grafana/grafana/pkg/storage/unified/apistore"
 	"github.com/grafana/grafana/pkg/storage/unified/resource"
 	"github.com/grafana/grafana/pkg/storage/unified/resourcepb"
+	"github.com/prometheus/client_golang/prometheus"
 )
 
-var (
-	_ rest.Scoper               = (*RegistryStorage)(nil)
-	_ rest.SingularNameProvider = (*RegistryStorage)(nil)
-	_ rest.Getter               = (*RegistryStorage)(nil)
-	_ rest.Lister               = (*RegistryStorage)(nil)
-	_ rest.Storage              = (*RegistryStorage)(nil)
-)
+func NewStore(corerole utils.ResourceInfo, scheme *runtime.Scheme, defaultOptsGetter generic.RESTOptionsGetter,
+	reg prometheus.Registerer, ac types.AccessClient, sql legacysql.LegacyDatabaseProvider) (grafanarest.Storage, error) {
+	server, err := resource.NewResourceServer(resource.ResourceServerOptions{
+		Backend:      newResourceStorageBackend(sql),
+		Reg:          reg,
+		AccessClient: ac,
+	})
+	if err != nil {
+		return nil, err
+	}
+	defaultOpts, err := defaultOptsGetter.GetRESTOptions(iamv0alpha1.CoreRoleInfo.GroupResource(), nil)
+	if err != nil {
+		return nil, err
+	}
+	// TODO should we move the direct client to another package?
+	client := legacy.NewDirectResourceClient(server)
+	optsGetter := apistore.NewRESTOptionsGetterForClient(client, defaultOpts.StorageConfig.Config, nil)
 
-type RegistryStorage struct{}
-
-// Destroy implements rest.Storage.
-func (s *RegistryStorage) Destroy() {
-	panic("unimplemented")
-}
-
-// New implements rest.Storage.
-func (s *RegistryStorage) New() runtime.Object {
-	panic("unimplemented")
-}
-
-// ConvertToTable implements rest.Lister.
-func (s *RegistryStorage) ConvertToTable(ctx context.Context, object runtime.Object, tableOptions runtime.Object) (*v1.Table, error) {
-	panic("unimplemented")
-}
-
-// List implements rest.Lister.
-func (s *RegistryStorage) List(ctx context.Context, options *internalversion.ListOptions) (runtime.Object, error) {
-	panic("unimplemented")
-}
-
-// NewList implements rest.Lister.
-func (s *RegistryStorage) NewList() runtime.Object {
-	panic("unimplemented")
-}
-
-// Get implements rest.Getter.
-func (s *RegistryStorage) Get(ctx context.Context, name string, options *v1.GetOptions) (runtime.Object, error) {
-	panic("unimplemented")
-}
-
-// GetSingularName implements rest.SingularNameProvider.
-func (s *RegistryStorage) GetSingularName() string {
-	panic("unimplemented")
-}
-
-// NamespaceScoped implements rest.Scoper.
-func (s *RegistryStorage) NamespaceScoped() bool {
-	panic("unimplemented")
+	// optsGetter.RegisterOptions(corerole.GroupResource(), apistore.StorageOptions{})
+	store, err := grafanaregistry.NewRegistryStore(scheme, corerole, optsGetter)
+	return store, err
 }
 
 var _ resource.StorageBackend = &sqlResourceStorageBackend{}
 
 type sqlResourceStorageBackend struct {
 	sql legacysql.LegacyDatabaseProvider
+
+	subscribers []chan *resource.WrittenEvent
+	mutex       sync.Mutex
+}
+
+func newResourceStorageBackend(sql legacysql.LegacyDatabaseProvider) *sqlResourceStorageBackend {
+	return &sqlResourceStorageBackend{
+		sql: sql,
+
+		subscribers: make([]chan *resource.WrittenEvent, 0),
+		mutex:       sync.Mutex{},
+	}
 }
 
 // GetResourceStats implements resource.StorageBackend.
@@ -139,7 +131,34 @@ func (s *sqlResourceStorageBackend) ReadResource(context.Context, *resourcepb.Re
 
 // WatchWriteEvents implements resource.StorageBackend.
 func (s *sqlResourceStorageBackend) WatchWriteEvents(ctx context.Context) (<-chan *resource.WrittenEvent, error) {
-	panic("unimplemented")
+	stream := make(chan *resource.WrittenEvent, 10)
+	{
+		s.mutex.Lock()
+		defer s.mutex.Unlock()
+
+		// Add the event stream
+		s.subscribers = append(s.subscribers, stream)
+	}
+
+	// Wait for context done
+	go func() {
+		// Wait till the context is done
+		<-ctx.Done()
+
+		// Then remove the subscription
+		s.mutex.Lock()
+		defer s.mutex.Unlock()
+
+		// Copy all streams without our listener
+		subs := []chan *resource.WrittenEvent{}
+		for _, sub := range s.subscribers {
+			if sub != stream {
+				subs = append(subs, sub)
+			}
+		}
+		s.subscribers = subs
+	}()
+	return stream, nil
 }
 
 // WriteEvent implements resource.StorageBackend.
