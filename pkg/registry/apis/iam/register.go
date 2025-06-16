@@ -64,6 +64,7 @@ func RegisterAPIService(
 	ssoService ssosettings.Service,
 	sql db.DB,
 	ac accesscontrol.AccessControl,
+	accessClient types.AccessClient,
 ) (*IdentityAccessManagementAPIBuilder, error) {
 	dbProvider := legacysql.NewDatabaseProvider(sql)
 	store := legacy.NewLegacySQLStores(dbProvider)
@@ -75,6 +76,7 @@ func RegisterAPIService(
 		sso:                  ssoService,
 		authorizer:           authorizer,
 		legacyAccessClient:   client,
+		accessClient:         accessClient,
 		display:              user.NewLegacyDisplayREST(store),
 		enableAuthZResources: features.IsEnabledGlobally(featuremgmt.FlagKubernetesAuthzApis),
 	}
