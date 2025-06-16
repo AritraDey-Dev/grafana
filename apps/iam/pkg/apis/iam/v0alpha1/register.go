@@ -42,30 +42,6 @@ var CoreRoleInfo = utils.NewResourceInfo(GROUP, VERSION,
 	},
 )
 
-var RoleBindingInfo = utils.NewResourceInfo(GROUP, VERSION,
-	"rolebindings", "rolebinding", "RoleBinding",
-	func() runtime.Object { return &RoleBinding{} },
-	func() runtime.Object { return &RoleBindingList{} },
-	utils.TableColumns{
-		Definition: []metav1.TableColumnDefinition{
-			{Name: "Name", Type: "string", Format: "name"},
-			{Name: "Created At", Type: "date"},
-		},
-		Reader: func(obj any) ([]interface{}, error) {
-			panel, ok := obj.(*RoleBinding)
-			if ok {
-				if panel != nil {
-					return []interface{}{
-						panel.Name,
-						panel.CreationTimestamp.UTC().Format(time.RFC3339),
-					}, nil
-				}
-			}
-			return nil, fmt.Errorf("expected role binding")
-		},
-	},
-)
-
 var (
 	SchemeBuilder      runtime.SchemeBuilder
 	localSchemeBuilder = &SchemeBuilder
