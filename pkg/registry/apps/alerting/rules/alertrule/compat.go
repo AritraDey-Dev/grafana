@@ -27,55 +27,50 @@ func ConvertToK8sResource(
 			Name:      rule.UID,
 			Namespace: namespaceMapper(orgID),
 		},
-		Spec: model.Spec{
+		Spec: model.AlertRuleSpec{
 			Title:    rule.Title,
 			Paused:   util.Pointer(rule.IsPaused),
-			Data:     make(map[string]model.Query),
-			Interval: model.PromDuration(strconv.FormatInt(rule.IntervalSeconds, 10)),
-			Labels:   make(map[string]model.TemplateString),
+			Data:     make(map[string]model.AlertRuleQuery),
+			Interval: model.AlertRulePromDuration(strconv.FormatInt(rule.IntervalSeconds, 10)),
+			Labels:   make(map[string]model.AlertRuleTemplateString),
 
 			For:                         rule.For.String(),
 			KeepFiringFor:               rule.KeepFiringFor.String(),
 			NoDataState:                 string(rule.NoDataState),
 			ExecErrState:                string(rule.ExecErrState),
 			MissingSeriesEvalsToResolve: rule.MissingSeriesEvalsToResolve,
-			Annotations:                 make(map[string]model.TemplateString),
+			Annotations:                 make(map[string]model.AlertRuleTemplateString),
 		},
 	}
 
 	for k, v := range rule.Annotations {
-		k8sRule.Spec.Annotations[k] = model.TemplateString(v)
+		k8sRule.Spec.Annotations[k] = model.AlertRuleTemplateString(v)
 	}
 	if rule.DashboardUID != nil {
-		k8sRule.Spec.Annotations["grafana_dashboard_uid"] = model.TemplateString(*rule.DashboardUID)
+		k8sRule.Spec.Annotations["grafana_dashboard_uid"] = model.AlertRuleTemplateString(*rule.DashboardUID)
 	}
 	if rule.PanelID != nil {
-		k8sRule.Spec.Annotations["grafana_panel_id"] = model.TemplateString(strconv.FormatInt(*rule.PanelID, 10))
+		k8sRule.Spec.Annotations["grafana_panel_id"] = model.AlertRuleTemplateString(strconv.FormatInt(*rule.PanelID, 10))
 	}
 
 	for k, v := range rule.Labels {
-		k8sRule.Spec.Labels[k] = model.TemplateString(v)
+		k8sRule.Spec.Labels[k] = model.AlertRuleTemplateString(v)
 	}
 
 	for _, query := range rule.Data {
-		modelJson := model.Json{}
-		if err := json.Unmarshal(query.Model, &modelJson); err != nil {
-			return nil, fmt.Errorf("failed to unmarshal raw message: %w", err)
-		}
-
-		k8sRule.Spec.Data[query.RefID] = model.Query{
+		k8sRule.Spec.Data[query.RefID] = model.AlertRuleQuery{
 			QueryType: query.QueryType,
-			RelativeTimeRange: model.RelativeTimeRange{
-				From: model.PromDurationWMillis(query.RelativeTimeRange.From.String()),
-				To:   model.PromDurationWMillis(query.RelativeTimeRange.To.String()),
+			RelativeTimeRange: model.AlertRuleRelativeTimeRange{
+				From: model.AlertRulePromDurationWMillis(query.RelativeTimeRange.From.String()),
+				To:   model.AlertRulePromDurationWMillis(query.RelativeTimeRange.To.String()),
 			},
-			Model:  modelJson,
+			Model:  query.Model,
 			Source: util.Pointer(rule.Condition == query.RefID),
 		}
 	}
 
 	for _, setting := range rule.NotificationSettings {
-		nfSetting := model.NotificationSettings{
+		nfSetting := model.AlertRuleNotificationSettings{
 			Receiver: setting.Receiver,
 			GroupBy:  setting.GroupBy,
 		}
@@ -89,14 +84,14 @@ func ConvertToK8sResource(
 			nfSetting.RepeatInterval = util.Pointer(setting.RepeatInterval.String())
 		}
 		if setting.MuteTimeIntervals != nil {
-			nfSetting.MuteTimeIntervals = make([]model.MuteTimeIntervalRef, 0, len(setting.MuteTimeIntervals))
-			for _ = range setting.MuteTimeIntervals {
+			nfSetting.MuteTimeIntervals = make([]model.AlertRuleMuteTimeIntervalRef, 0, len(setting.MuteTimeIntervals))
+			for range setting.MuteTimeIntervals {
 				// TODO(@rwwiv): Maybe this should be the raw string value so we aren't making multiple DB calls?
 			}
 		}
 		if setting.ActiveTimeIntervals != nil {
-			nfSetting.ActiveTimeIntervals = make([]model.ActiveTimeIntervalRef, 0, len(setting.ActiveTimeIntervals))
-			for _ = range setting.ActiveTimeIntervals {
+			nfSetting.ActiveTimeIntervals = make([]model.AlertRuleActiveTimeIntervalRef, 0, len(setting.ActiveTimeIntervals))
+			for range setting.ActiveTimeIntervals {
 				// TODO(@rwwiv): Maybe this should be the raw string value so we aren't making multiple DB calls?
 			}
 		}

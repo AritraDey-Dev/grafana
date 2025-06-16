@@ -29,12 +29,12 @@ func ConvertToK8sResource(
 			Name:      rule.UID,
 			Namespace: namespaceMapper(orgID),
 		},
-		Spec: model.Spec{
+		Spec: model.RecordingRuleSpec{
 			Title:    rule.Title,
 			Paused:   util.Pointer(rule.IsPaused),
-			Data:     make(map[string]model.Query),
-			Interval: model.PromDuration(strconv.FormatInt(rule.IntervalSeconds, 10)),
-			Labels:   make(map[string]model.TemplateString),
+			Data:     make(map[string]model.RecordingRuleQuery),
+			Interval: model.RecordingRulePromDuration(strconv.FormatInt(rule.IntervalSeconds, 10)),
+			Labels:   make(map[string]model.RecordingRuleTemplateString),
 
 			Metric:              rule.Record.Metric,
 			TargetDatasourceUID: rule.Record.TargetDatasourceUID,
@@ -42,21 +42,17 @@ func ConvertToK8sResource(
 	}
 
 	for k, v := range rule.Labels {
-		k8sRule.Spec.Labels[k] = model.TemplateString(v)
+		k8sRule.Spec.Labels[k] = model.RecordingRuleTemplateString(v)
 	}
 
 	for _, query := range rule.Data {
-		modelJson := model.Json{}
-		if err := json.Unmarshal(query.Model, &modelJson); err != nil {
-			return nil, fmt.Errorf("failed to unmarshal raw message: %w", err)
-		}
-		k8sRule.Spec.Data[query.RefID] = model.Query{
+		k8sRule.Spec.Data[query.RefID] = model.RecordingRuleQuery{
 			QueryType: query.QueryType,
-			RelativeTimeRange: model.RelativeTimeRange{
-				From: model.PromDurationWMillis(query.RelativeTimeRange.From.String()),
-				To:   model.PromDurationWMillis(query.RelativeTimeRange.To.String()),
+			RelativeTimeRange: model.RecordingRuleRelativeTimeRange{
+				From: model.RecordingRulePromDurationWMillis(query.RelativeTimeRange.From.String()),
+				To:   model.RecordingRulePromDurationWMillis(query.RelativeTimeRange.To.String()),
 			},
-			Model:  modelJson,
+			Model:  query.Model,
 			Source: util.Pointer(rule.Condition == query.RefID),
 		}
 	}
