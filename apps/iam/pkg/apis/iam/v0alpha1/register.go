@@ -19,7 +19,7 @@ const (
 var CoreRoleInfo = utils.NewResourceInfo(GROUP, VERSION,
 	"coreroles", "corerole", "CoreRole",
 	func() runtime.Object { return &CoreRole{} },
-	func() runtime.Object { return &CoreRole{} },
+	func() runtime.Object { return &CoreRoleList{} },
 	utils.TableColumns{
 		Definition: []metav1.TableColumnDefinition{
 			{Name: "Name", Type: "string", Format: "name"},
@@ -45,7 +45,7 @@ var CoreRoleInfo = utils.NewResourceInfo(GROUP, VERSION,
 var RoleBindingInfo = utils.NewResourceInfo(GROUP, VERSION,
 	"rolebindings", "rolebinding", "RoleBinding",
 	func() runtime.Object { return &RoleBinding{} },
-	func() runtime.Object { return &RoleBinding{} },
+	func() runtime.Object { return &RoleBindingList{} },
 	utils.TableColumns{
 		Definition: []metav1.TableColumnDefinition{
 			{Name: "Name", Type: "string", Format: "name"},
@@ -81,7 +81,7 @@ func init() {
 func addKnownTypes(scheme *runtime.Scheme) error {
 	scheme.AddKnownTypes(schemeGroupVersion,
 		&CoreRole{},
-		&RoleBinding{},
+		&CoreRoleList{},
 
 		// What is this about?
 		&metav1.PartialObjectMetadata{},
