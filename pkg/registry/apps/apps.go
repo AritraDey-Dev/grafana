@@ -11,6 +11,7 @@ import (
 	"github.com/grafana/grafana/pkg/registry"
 	"github.com/grafana/grafana/pkg/registry/apps/advisor"
 	"github.com/grafana/grafana/pkg/registry/apps/alerting/notifications"
+	"github.com/grafana/grafana/pkg/registry/apps/foobar"
 	"github.com/grafana/grafana/pkg/registry/apps/investigations"
 	"github.com/grafana/grafana/pkg/registry/apps/playlist"
 	"github.com/grafana/grafana/pkg/services/apiserver"
@@ -36,6 +37,7 @@ func ProvideRegistryServiceSink(
 	features featuremgmt.FeatureToggles,
 	playlistAppProvider *playlist.PlaylistAppProvider,
 	investigationAppProvider *investigations.InvestigationsAppProvider,
+	foobarAppProvider *foobar.AppProvider,
 	advisorAppProvider *advisor.AdvisorAppProvider,
 	alertingNotificationsAppProvider *notifications.AlertingNotificationsAppProvider,
 	grafanaCfg *setting.Cfg,
@@ -56,7 +58,7 @@ func ProvideRegistryServiceSink(
 	logger := log.New("app-registry")
 	var apiGroupRunner *runner.APIGroupRunner
 	var err error
-	providers := []app.Provider{playlistAppProvider}
+	providers := []app.Provider{playlistAppProvider, foobarAppProvider}
 	if features.IsEnabledGlobally(featuremgmt.FlagInvestigationsBackend) {
 		logger.Debug("Investigations backend is enabled")
 		providers = append(providers, investigationAppProvider)

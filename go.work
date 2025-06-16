@@ -9,6 +9,7 @@ use (
 	./apps/alerting/notifications
 	./apps/dashboard
 	./apps/folder
+	./apps/foobar
 	./apps/iam
 	./apps/investigations
 	./apps/playlist
