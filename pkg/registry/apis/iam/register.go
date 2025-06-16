@@ -65,6 +65,7 @@ func RegisterAPIService(
 	sql db.DB,
 	ac accesscontrol.AccessControl,
 	accessClient types.AccessClient,
+	reg prometheus.Registerer,
 ) (*IdentityAccessManagementAPIBuilder, error) {
 	dbProvider := legacysql.NewDatabaseProvider(sql)
 	store := legacy.NewLegacySQLStores(dbProvider)
@@ -78,6 +79,7 @@ func RegisterAPIService(
 		legacyAccessClient:   client,
 		accessClient:         accessClient,
 		display:              user.NewLegacyDisplayREST(store),
+		reg:                  reg,
 		enableAuthZResources: features.IsEnabledGlobally(featuremgmt.FlagKubernetesAuthzApis),
 	}
 	apiregistration.RegisterAPI(builder)
@@ -149,13 +151,12 @@ func (b *IdentityAccessManagementAPIBuilder) UpdateAPIGroupInfo(apiGroupInfo *ge
 	if b.enableAuthZResources {
 		// v0alpha1
 		coreRoleResource := iamv0b.CoreRoleInfo
-		// TODO
-		// TODO wrong accessClient
 		store, err := corerole.NewStore(
 			coreRoleResource,
 			apiGroupInfo.Scheme,
 			opts.OptsGetter,
-			b.reg, b.accessClient,
+			b.reg,
+			b.accessClient,
 			b.dbProvider,
 		)
 		if err != nil {
