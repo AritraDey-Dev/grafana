@@ -5,9 +5,10 @@ import (
 
 	grafanarest "github.com/grafana/grafana/pkg/apiserver/rest"
 	"github.com/grafana/grafana/pkg/services/apiserver/endpoints/request"
+	"github.com/grafana/grafana/pkg/services/ngalert/provisioning"
 )
 
-func NewStorage(legacySvc RuleService, namespacer request.NamespaceMapper) grafanarest.Storage {
+func NewStorage(legacySvc provisioning.AlertRuleService, namespacer request.NamespaceMapper) grafanarest.Storage {
 	return &legacyStorage{
 		service:        legacySvc,
 		namespacer:     namespacer,

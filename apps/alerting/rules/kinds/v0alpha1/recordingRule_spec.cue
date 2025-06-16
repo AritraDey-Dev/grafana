@@ -1,7 +1,8 @@
 package v0alpha1
 
 RecordingRuleSpec: #RuleSpec & {
-	metric: #MetricName
+	metric:              #MetricName
+	targetDatasourceUID: #DatasourceUID
 }
 
 // TODO(@moustafab): validate the metric name regex

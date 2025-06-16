@@ -2,6 +2,7 @@ package alertrule
 
 import (
 	"context"
+	"fmt"
 
 	"k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/apis/meta/internalversion"
@@ -10,23 +11,19 @@ import (
 	"k8s.io/apiserver/pkg/registry/rest"
 
 	model "github.com/grafana/grafana/apps/alerting/rules/pkg/apis/alertrule/v0alpha1"
+	"github.com/grafana/grafana/pkg/apimachinery/identity"
 	grafanarest "github.com/grafana/grafana/pkg/apiserver/rest"
 	"github.com/grafana/grafana/pkg/services/apiserver/endpoints/request"
+	"github.com/grafana/grafana/pkg/services/ngalert/models"
+	"github.com/grafana/grafana/pkg/services/ngalert/provisioning"
 )
 
 var (
 	_ grafanarest.Storage = (*legacyStorage)(nil)
 )
 
-type RuleService interface {
-	GetRule(ctx context.Context, orgID int64, ruleUID string) (*model.AlertRule, error)
-	CreateRule(ctx context.Context, orgID int64, rule *model.AlertRule) (*model.AlertRule, error)
-	UpdateRule(ctx context.Context, orgID int64, ruleUID string, rule *model.AlertRule) (*model.AlertRule, error)
-	DeleteRule(ctx context.Context, orgID int64, ruleUID string) error
-}
-
 type legacyStorage struct {
-	service        RuleService
+	service        provisioning.AlertRuleService
 	namespacer     request.NamespaceMapper
 	tableConverter rest.TableConvertor
 }
@@ -54,28 +51,129 @@ func (s *legacyStorage) ConvertToTable(ctx context.Context, object runtime.Objec
 }
 
 func (s *legacyStorage) List(ctx context.Context, _ *internalversion.ListOptions) (runtime.Object, error) {
-	// TODO: Implement
-	return nil, nil
+	user, err := identity.GetRequester(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	rules, _, err := s.service.GetAlertRules(ctx, user)
+	if err != nil {
+		return nil, err
+	}
+	resources, err := ConvertToK8sResources(user.GetOrgID(), rules, s.namespacer)
+	if err != nil {
+		return nil, err
+	}
+
+	return resources, nil
 }
 
 func (s *legacyStorage) Get(ctx context.Context, name string, _ *metav1.GetOptions) (runtime.Object, error) {
-	// TODO: Implement
-	return nil, nil
+	user, err := identity.GetRequester(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	rule, _, err := s.service.GetAlertRule(ctx, user, name)
+	if err != nil {
+		return nil, err
+	}
+
+	return ConvertToK8sResource(user.GetOrgID(), &rule, s.namespacer)
 }
 
 func (s *legacyStorage) Create(ctx context.Context, obj runtime.Object, _ rest.ValidateObjectFunc, _ *metav1.CreateOptions) (runtime.Object, error) {
-	// TODO: Implement
-	return nil, nil
+	user, err := identity.GetRequester(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	p, ok := obj.(*model.AlertRule)
+	if !ok {
+		return nil, fmt.Errorf("expected alert rule but got %T", obj)
+	}
+	if p.Name != "" {
+		return nil, errors.NewBadRequest("object's metadata.name should be empty")
+	}
+
+	model, err := ConvertToDomainModel(p)
+	if err != nil {
+		return nil, err
+	}
+
+	created, err := s.service.CreateAlertRule(ctx, user, *model, models.ProvenanceNone)
+	if err != nil {
+		return nil, err
+	}
+
+	return ConvertToK8sResource(user.GetOrgID(), &created, s.namespacer)
 }
 
 func (s *legacyStorage) Update(ctx context.Context, name string, objInfo rest.UpdatedObjectInfo, _ rest.ValidateObjectFunc, updateValidation rest.ValidateObjectUpdateFunc, _ bool, options *metav1.UpdateOptions) (runtime.Object, bool, error) {
-	// TODO: Implement
-	return nil, false, nil
+	user, err := identity.GetRequester(ctx)
+	if err != nil {
+		return nil, false, err
+	}
+
+	old, err := s.Get(ctx, name, nil)
+	if err != nil {
+		return old, false, err
+	}
+
+	obj, err := objInfo.UpdatedObject(ctx, old)
+	if err != nil {
+		return old, false, err
+	}
+	if updateValidation != nil {
+		if err := updateValidation(ctx, obj, old); err != nil {
+			return nil, false, err
+		}
+	}
+
+	p, ok := obj.(*model.AlertRule)
+	if !ok {
+		return nil, false, fmt.Errorf("expected alert rule but got %T", obj)
+	}
+	model, err := ConvertToDomainModel(p)
+	if err != nil {
+		return old, false, err
+	}
+
+	updated, err := s.service.UpdateAlertRule(ctx, user, *model, models.ProvenanceNone)
+	if err != nil {
+		return nil, false, err
+	}
+
+	rule, err := ConvertToK8sResource(user.GetOrgID(), &updated, s.namespacer)
+	if err != nil {
+		return nil, false, err
+	}
+
+	return rule, false, nil
 }
 
 func (s *legacyStorage) Delete(ctx context.Context, name string, deleteValidation rest.ValidateObjectFunc, opts *metav1.DeleteOptions) (runtime.Object, bool, error) {
-	// TODO: Implement
-	return nil, false, nil
+	user, err := identity.GetRequester(ctx)
+	if err != nil {
+		return nil, false, err
+	}
+
+	old, err := s.Get(ctx, name, nil)
+	if err != nil {
+		return old, false, err
+	}
+	if deleteValidation != nil {
+		if err := deleteValidation(ctx, old); err != nil {
+			return nil, false, err
+		}
+	}
+
+	err = s.service.DeleteAlertRule(ctx, user, name, models.ProvenanceNone)
+	if err != nil {
+		return old, false, err
+	}
+
+	return old, false, nil
 }
 
 func (s *legacyStorage) DeleteCollection(_ context.Context, _ rest.ValidateObjectFunc, _ *metav1.DeleteOptions, _ *internalversion.ListOptions) (runtime.Object, error) {

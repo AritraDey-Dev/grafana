@@ -9,8 +9,6 @@ import "time"
 TemplateString: string                       // =~ figure out the regex for the template string
 #DatasourceUID: string & =~"^[a-zA-Z0-9_]+$" // TODO(@moustafab): validate regex for datasource UID
 
-#MuteTimeIntervalRef: string // TODO(@moustafab): validate regex for mute time interval ref
-
 #RuleSpec: {
 	title:   string
 	paused?: bool
