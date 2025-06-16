@@ -3,42 +3,42 @@
 package v0alpha1
 
 // +k8s:openapi-gen=true
-type StatusOperatorState struct {
+type RecordingRulestatusOperatorState struct {
 	// lastEvaluation is the ResourceVersion last evaluated
 	LastEvaluation string `json:"lastEvaluation"`
 	// state describes the state of the lastEvaluation.
 	// It is limited to three possible states for machine evaluation.
-	State StatusOperatorStateState `json:"state"`
+	State RecordingRuleStatusOperatorStateState `json:"state"`
 	// descriptiveState is an optional more descriptive state field which has no requirements on format
 	DescriptiveState *string `json:"descriptiveState,omitempty"`
 	// details contains any extra information that is operator-specific
 	Details map[string]interface{} `json:"details,omitempty"`
 }
 
-// NewStatusOperatorState creates a new StatusOperatorState object.
-func NewStatusOperatorState() *StatusOperatorState {
-	return &StatusOperatorState{}
+// NewRecordingRulestatusOperatorState creates a new RecordingRulestatusOperatorState object.
+func NewRecordingRulestatusOperatorState() *RecordingRulestatusOperatorState {
+	return &RecordingRulestatusOperatorState{}
 }
 
 // +k8s:openapi-gen=true
-type Status struct {
+type RecordingRuleStatus struct {
 	// operatorStates is a map of operator ID to operator state evaluations.
 	// Any operator which consumes this kind SHOULD add its state evaluation information to this field.
-	OperatorStates map[string]StatusOperatorState `json:"operatorStates,omitempty"`
+	OperatorStates map[string]RecordingRulestatusOperatorState `json:"operatorStates,omitempty"`
 	// additionalFields is reserved for future use
 	AdditionalFields map[string]interface{} `json:"additionalFields,omitempty"`
 }
 
-// NewStatus creates a new Status object.
-func NewStatus() *Status {
-	return &Status{}
+// NewRecordingRuleStatus creates a new RecordingRuleStatus object.
+func NewRecordingRuleStatus() *RecordingRuleStatus {
+	return &RecordingRuleStatus{}
 }
 
 // +k8s:openapi-gen=true
-type StatusOperatorStateState string
+type RecordingRuleStatusOperatorStateState string
 
 const (
-	StatusOperatorStateStateSuccess    StatusOperatorStateState = "success"
-	StatusOperatorStateStateInProgress StatusOperatorStateState = "in_progress"
-	StatusOperatorStateStateFailed     StatusOperatorStateState = "failed"
+	RecordingRuleStatusOperatorStateStateSuccess    RecordingRuleStatusOperatorStateState = "success"
+	RecordingRuleStatusOperatorStateStateInProgress RecordingRuleStatusOperatorStateState = "in_progress"
+	RecordingRuleStatusOperatorStateStateFailed     RecordingRuleStatusOperatorStateState = "failed"
 )

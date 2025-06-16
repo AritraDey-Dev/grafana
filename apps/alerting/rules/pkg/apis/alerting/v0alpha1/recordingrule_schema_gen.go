@@ -13,7 +13,7 @@ import (
 // schema is unexported to prevent accidental overwrites
 var (
 	schemaRecordingRule = resource.NewSimpleSchema("rules.alerting.grafana.app", "v0alpha1", &RecordingRule{}, &RecordingRuleList{}, resource.WithKind("RecordingRule"),
-		resource.WithPlural("recordingrules"), resource.WithScope(resource.NamespacedScope), resource.WithSelectableFields([]resource.SelectableField{resource.SelectableField{
+		resource.WithPlural("recordingrules"), resource.WithScope(resource.NamespacedScope), resource.WithSelectableFields([]resource.SelectableField{{
 			FieldSelector: "spec.title",
 			FieldValueFunc: func(o resource.Object) (string, error) {
 				cast, ok := o.(*RecordingRule)
@@ -27,18 +27,18 @@ var (
 	kindRecordingRule = resource.Kind{
 		Schema: schemaRecordingRule,
 		Codecs: map[resource.KindEncoding]resource.Codec{
-			resource.KindEncodingJSON: &JSONCodec{},
+			resource.KindEncodingJSON: &RecordingRuleJSONCodec{},
 		},
 	}
 )
 
 // Kind returns a resource.Kind for this Schema with a JSON codec
-func Kind() resource.Kind {
+func RecordingRuleKind() resource.Kind {
 	return kindRecordingRule
 }
 
 // Schema returns a resource.SimpleSchema representation of RecordingRule
-func Schema() *resource.SimpleSchema {
+func RecordingRuleSchema() *resource.SimpleSchema {
 	return schemaRecordingRule
 }
 

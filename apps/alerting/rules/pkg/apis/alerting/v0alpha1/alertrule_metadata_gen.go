@@ -9,7 +9,7 @@ import (
 // metadata contains embedded CommonMetadata and can be extended with custom string fields
 // TODO: use CommonMetadata instead of redefining here; currently needs to be defined here
 // without external reference as using the CommonMetadata reference breaks thema codegen.
-type Metadata struct {
+type AlertRuleMetadata struct {
 	UpdateTimestamp   time.Time         `json:"updateTimestamp"`
 	CreatedBy         string            `json:"createdBy"`
 	Uid               string            `json:"uid"`
@@ -22,7 +22,10 @@ type Metadata struct {
 	Labels            map[string]string `json:"labels"`
 }
 
-// NewMetadata creates a new Metadata object.
-func NewMetadata() *Metadata {
-	return &Metadata{}
+// NewAlertRuleMetadata creates a new AlertRuleMetadata object.
+func NewAlertRuleMetadata() *AlertRuleMetadata {
+	return &AlertRuleMetadata{
+		Finalizers: []string{},
+		Labels:     map[string]string{},
+	}
 }

@@ -20,9 +20,9 @@ type AlertRule struct {
 	metav1.ObjectMeta `json:"metadata" yaml:"metadata"`
 
 	// Spec is the spec of the AlertRule
-	Spec Spec `json:"spec" yaml:"spec"`
+	Spec AlertRuleSpec `json:"spec" yaml:"spec"`
 
-	Status Status `json:"status" yaml:"status"`
+	Status AlertRuleStatus `json:"status" yaml:"status"`
 }
 
 func (o *AlertRule) GetSpec() any {
@@ -30,7 +30,7 @@ func (o *AlertRule) GetSpec() any {
 }
 
 func (o *AlertRule) SetSpec(spec any) error {
-	cast, ok := spec.(Spec)
+	cast, ok := spec.(AlertRuleSpec)
 	if !ok {
 		return fmt.Errorf("cannot set spec type %#v, not of type Spec", spec)
 	}
@@ -56,9 +56,9 @@ func (o *AlertRule) GetSubresource(name string) (any, bool) {
 func (o *AlertRule) SetSubresource(name string, value any) error {
 	switch name {
 	case "status":
-		cast, ok := value.(Status)
+		cast, ok := value.(AlertRuleStatus)
 		if !ok {
-			return fmt.Errorf("cannot set status type %#v, not of type Status", value)
+			return fmt.Errorf("cannot set status type %#v, not of type AlertRuleStatus", value)
 		}
 		o.Status = cast
 		return nil
@@ -295,25 +295,25 @@ var _ resource.ListObject = &AlertRuleList{}
 // Copy methods for all subresource types
 
 // DeepCopy creates a full deep copy of Spec
-func (s *Spec) DeepCopy() *Spec {
-	cpy := &Spec{}
+func (s *AlertRuleSpec) DeepCopy() *AlertRuleSpec {
+	cpy := &AlertRuleSpec{}
 	s.DeepCopyInto(cpy)
 	return cpy
 }
 
 // DeepCopyInto deep copies Spec into another Spec object
-func (s *Spec) DeepCopyInto(dst *Spec) {
+func (s *AlertRuleSpec) DeepCopyInto(dst *AlertRuleSpec) {
 	resource.CopyObjectInto(dst, s)
 }
 
-// DeepCopy creates a full deep copy of Status
-func (s *Status) DeepCopy() *Status {
-	cpy := &Status{}
+// DeepCopy creates a full deep copy of AlertRuleStatus
+func (s *AlertRuleStatus) DeepCopy() *AlertRuleStatus {
+	cpy := &AlertRuleStatus{}
 	s.DeepCopyInto(cpy)
 	return cpy
 }
 
-// DeepCopyInto deep copies Status into another Status object
-func (s *Status) DeepCopyInto(dst *Status) {
+// DeepCopyInto deep copies AlertRuleStatus into another AlertRuleStatus object
+func (s *AlertRuleStatus) DeepCopyInto(dst *AlertRuleStatus) {
 	resource.CopyObjectInto(dst, s)
 }

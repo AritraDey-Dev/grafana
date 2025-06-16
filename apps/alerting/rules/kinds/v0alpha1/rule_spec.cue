@@ -24,10 +24,6 @@ TemplateString: string                       // =~ figure out the regex for the 
 	...
 }
 
-#Json: {
-	[string]: #Json | [...#Json] | string | bool | number | null
-}
-
 #RelativeTimeRange: {
 	from: #PromDurationWMillis
 	to:   #PromDurationWMillis
@@ -37,6 +33,6 @@ TemplateString: string                       // =~ figure out the regex for the 
 	queryType:         string
 	relativeTimeRange: #RelativeTimeRange
 	datasourceUID:     #DatasourceUID
-	model:             #Json
+	model:             _
 	source?:           bool
 }

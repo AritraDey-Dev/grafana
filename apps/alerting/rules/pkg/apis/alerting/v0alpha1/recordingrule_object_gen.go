@@ -20,9 +20,9 @@ type RecordingRule struct {
 	metav1.ObjectMeta `json:"metadata" yaml:"metadata"`
 
 	// Spec is the spec of the RecordingRule
-	Spec Spec `json:"spec" yaml:"spec"`
+	Spec RecordingRuleSpec `json:"spec" yaml:"spec"`
 
-	Status Status `json:"status" yaml:"status"`
+	Status RecordingRuleStatus `json:"status" yaml:"status"`
 }
 
 func (o *RecordingRule) GetSpec() any {
@@ -30,7 +30,7 @@ func (o *RecordingRule) GetSpec() any {
 }
 
 func (o *RecordingRule) SetSpec(spec any) error {
-	cast, ok := spec.(Spec)
+	cast, ok := spec.(RecordingRuleSpec)
 	if !ok {
 		return fmt.Errorf("cannot set spec type %#v, not of type Spec", spec)
 	}
@@ -56,9 +56,9 @@ func (o *RecordingRule) GetSubresource(name string) (any, bool) {
 func (o *RecordingRule) SetSubresource(name string, value any) error {
 	switch name {
 	case "status":
-		cast, ok := value.(Status)
+		cast, ok := value.(RecordingRuleStatus)
 		if !ok {
-			return fmt.Errorf("cannot set status type %#v, not of type Status", value)
+			return fmt.Errorf("cannot set status type %#v, not of type RecordingRuleStatus", value)
 		}
 		o.Status = cast
 		return nil
@@ -295,25 +295,25 @@ var _ resource.ListObject = &RecordingRuleList{}
 // Copy methods for all subresource types
 
 // DeepCopy creates a full deep copy of Spec
-func (s *Spec) DeepCopy() *Spec {
-	cpy := &Spec{}
+func (s *RecordingRuleSpec) DeepCopy() *RecordingRuleSpec {
+	cpy := &RecordingRuleSpec{}
 	s.DeepCopyInto(cpy)
 	return cpy
 }
 
 // DeepCopyInto deep copies Spec into another Spec object
-func (s *Spec) DeepCopyInto(dst *Spec) {
+func (s *RecordingRuleSpec) DeepCopyInto(dst *RecordingRuleSpec) {
 	resource.CopyObjectInto(dst, s)
 }
 
-// DeepCopy creates a full deep copy of Status
-func (s *Status) DeepCopy() *Status {
-	cpy := &Status{}
+// DeepCopy creates a full deep copy of RecordingRuleStatus
+func (s *RecordingRuleStatus) DeepCopy() *RecordingRuleStatus {
+	cpy := &RecordingRuleStatus{}
 	s.DeepCopyInto(cpy)
 	return cpy
 }
 
-// DeepCopyInto deep copies Status into another Status object
-func (s *Status) DeepCopyInto(dst *Status) {
+// DeepCopyInto deep copies RecordingRuleStatus into another RecordingRuleStatus object
+func (s *RecordingRuleStatus) DeepCopyInto(dst *RecordingRuleStatus) {
 	resource.CopyObjectInto(dst, s)
 }

@@ -9,8 +9,8 @@ recordingRule: {
 	apiResource: {
 		groupOverride: "rules.alerting.grafana.app"
 	}
-    pluralName: "RecordingRules"
-	current: "v0alpha1"
+	pluralName: "RecordingRules"
+	current:    "v0alpha1"
 	codegen: {
 		ts: {enabled: false}
 		go: {enabled: true}
