@@ -39,10 +39,11 @@ type ListCoreRolesQuery struct {
 	Pagination common.Pagination
 }
 
-type ListCoreRolesResult struct {
-	Roles    []accesscontrol.RoleDTO
-	Continue int64
-	RV       int64
+type listCoreRolesQuery struct {
+	sqltemplate.SQLTemplate
+	Query            *ListCoreRolesQuery
+	RoleTable        string
+	FixedRolePattern string
 }
 
 var sqlQueryCoreRolesTemplate = mustTemplate("core_role_query.sql")
@@ -54,13 +55,6 @@ func newListCoreRoles(sql *legacysql.LegacyDatabaseHelper, q *ListCoreRolesQuery
 		FixedRolePattern: sql.Table("fixed:%"),
 		Query:            q,
 	}
-}
-
-type listCoreRolesQuery struct {
-	sqltemplate.SQLTemplate
-	Query            *ListCoreRolesQuery
-	RoleTable        string
-	FixedRolePattern string
 }
 
 func (s *sqlResourceStorageBackend) getRows(ctx context.Context, sql *legacysql.LegacyDatabaseHelper, query *ListCoreRolesQuery) (*rowsWrapper, error) {
@@ -192,4 +186,92 @@ func (r *rowsWrapper) Value() []byte {
 	b, err := json.Marshal(r.row)
 	r.err = err
 	return b
+}
+
+type ListCoreRolePermissionsQuery struct {
+	RoleID int64
+}
+
+type listCoreRolePermissionsQuery struct {
+	sqltemplate.SQLTemplate
+	Query           *ListCoreRolePermissionsQuery
+	PermissionTable string
+}
+
+var sqlQueryCoreRolePermissionsTemplate = mustTemplate("core_role_permissions_query.sql")
+
+func newListCoreRolePermissions(sql *legacysql.LegacyDatabaseHelper, q *ListCoreRolePermissionsQuery) listCoreRolePermissionsQuery {
+	return listCoreRolePermissionsQuery{
+		SQLTemplate:     sqltemplate.New(sql.DialectForDriver()),
+		PermissionTable: sql.Table("permission"),
+		Query:           q,
+	}
+}
+
+func (s *sqlResourceStorageBackend) getCoreRole(ctx context.Context, sql *legacysql.LegacyDatabaseHelper, name string) (*v0alpha1.CoreRole, error) {
+	query := &ListCoreRolesQuery{
+		UID: name,
+		Pagination: common.Pagination{
+			Limit:    1, // We only want one
+			Continue: 0, // No continuation token
+		},
+	}
+
+	req := newListCoreRoles(sql, query)
+	tmpl := sqlQueryCoreRolesTemplate
+
+	rawQuery, err := sqltemplate.Execute(tmpl, req)
+	if err != nil {
+		return nil, fmt.Errorf("execute template %q: %w", tmpl.Name(), err)
+	}
+
+	rows, err := sql.DB.GetSqlxSession().Query(ctx, rawQuery, req.GetArgs()...)
+	if err != nil {
+		if rows != nil {
+			_ = rows.Close()
+		}
+		return nil, fmt.Errorf("querying core roles: %w", err)
+	}
+	defer func() {
+		_ = rows.Close()
+	}()
+	if !rows.Next() {
+		return nil, fmt.Errorf("core role %q not found", name)
+	}
+
+	role := accesscontrol.RoleDTO{}
+	if err := rows.Scan(&role.Version, &role.OrgID, &role.ID, &role.UID, &role.Name, &role.DisplayName,
+		&role.Description, &role.Group, &role.Hidden, &role.Created, &role.Updated,
+	); err != nil {
+		return nil, fmt.Errorf("scanning core role %q: %w", name, err)
+	}
+	coreRole := toCoreRole(&role)
+
+	reqP := newListCoreRolePermissions(sql, &ListCoreRolePermissionsQuery{role.ID})
+	tmplP := sqlQueryCoreRolePermissionsTemplate
+
+	rawQueryP, err := sqltemplate.Execute(tmplP, reqP)
+	if err != nil {
+		return nil, fmt.Errorf("execute template %q: %w", tmplP.Name(), err)
+	}
+	rowsP, err := sql.DB.GetSqlxSession().Query(ctx, rawQueryP, reqP.GetArgs()...)
+	if err != nil {
+		if rowsP != nil {
+			_ = rowsP.Close()
+		}
+		return nil, fmt.Errorf("querying core role permissions for %q: %w", name, err)
+	}
+	defer func() {
+		_ = rowsP.Close()
+	}()
+	permissions := []v0alpha1.CoreRolespecPermission{}
+	for rowsP.Next() {
+		var perm v0alpha1.CoreRolespecPermission
+		if err := rowsP.Scan(&perm.Action, &perm.Scope); err != nil {
+			return nil, fmt.Errorf("scanning core role permissions for %q: %w", name, err)
+		}
+		permissions = append(permissions, perm)
+	}
+	coreRole.Spec.Permissions = permissions
+	return coreRole, nil
 }

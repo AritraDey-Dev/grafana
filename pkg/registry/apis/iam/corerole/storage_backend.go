@@ -2,6 +2,7 @@ package corerole
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"strconv"
 	"strings"
@@ -125,8 +126,40 @@ func (s *sqlResourceStorageBackend) ListIterator(ctx context.Context, req *resou
 }
 
 // ReadResource implements resource.StorageBackend.
-func (s *sqlResourceStorageBackend) ReadResource(context.Context, *resourcepb.ReadRequest) *resource.BackendReadResponse {
-	panic("unimplemented")
+func (s *sqlResourceStorageBackend) ReadResource(ctx context.Context, req *resourcepb.ReadRequest) *resource.BackendReadResponse {
+	version := int64(0)
+	if req.ResourceVersion > 0 {
+		version = req.ResourceVersion
+	}
+
+	// TODO what about the version?
+	rsp := &resource.BackendReadResponse{
+		ResourceVersion: version,
+	}
+
+	sql, err := s.sql(ctx)
+	if err != nil {
+		rsp.Error = resource.AsErrorResult(err)
+		return rsp
+	}
+
+	role, err := s.getCoreRole(ctx, sql, req.Key.Name)
+	if err != nil {
+		rsp.Error = resource.AsErrorResult(err)
+		return rsp
+	}
+	if role == nil {
+		rsp.Error = resource.AsErrorResult(apierrors.NewNotFound(iamv0alpha1.CoreRoleInfo.GroupResource(), req.Key.Name))
+		return rsp
+	}
+
+	rsp.Value, err = json.Marshal(role)
+	if err != nil {
+		rsp.Error = resource.AsErrorResult(err)
+		return rsp
+	}
+
+	return rsp
 }
 
 // WatchWriteEvents implements resource.StorageBackend.
