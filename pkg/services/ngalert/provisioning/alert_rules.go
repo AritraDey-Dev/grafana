@@ -243,6 +243,7 @@ func (service *AlertRuleService) CreateAlertRule(ctx context.Context, user ident
 	if err != nil {
 		return models.AlertRule{}, err
 	}
+	// FIXME(@moustafab||@rwwiv): need to allow for different intervals for sentinel group (non-grouped apis)
 	if canWriteAllRules {
 		groupInterval, err := service.ruleStore.GetRuleGroupInterval(ctx, rule.OrgID, rule.NamespaceUID, rule.RuleGroup)
 		// if the alert group does not exist we just use the default interval

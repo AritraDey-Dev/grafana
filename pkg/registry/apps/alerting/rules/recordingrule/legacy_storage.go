@@ -109,6 +109,7 @@ func (s *legacyStorage) Create(ctx context.Context, obj runtime.Object, _ rest.V
 
 	return ConvertToK8sResource(user.GetOrgID(), &rule, s.namespacer)
 }
+
 func (s *legacyStorage) Update(ctx context.Context, name string, objInfo rest.UpdatedObjectInfo, _ rest.ValidateObjectFunc, updateValidation rest.ValidateObjectUpdateFunc, _ bool, options *metav1.UpdateOptions) (runtime.Object, bool, error) {
 	user, err := identity.GetRequester(ctx)
 	if err != nil {
