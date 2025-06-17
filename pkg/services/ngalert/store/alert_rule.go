@@ -639,11 +639,12 @@ func (st DBstore) ListAlertRules(ctx context.Context, query *ngmodels.ListAlertR
 			}
 		}
 
+		// FIXME: record is nullable but we don't save it as null when it's nil
 		switch query.RuleType {
 		case ngmodels.RuleTypeFilterAlerting:
-			q = q.Where("record = null")
+			q = q.Where("record = ''")
 		case ngmodels.RuleTypeFilterRecording:
-			q = q.Where("record != null")
+			q = q.Where("record != ''")
 		case ngmodels.RuleTypeFilterAll:
 			// no additional filter
 		default:
