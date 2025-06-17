@@ -189,7 +189,7 @@ func (r *listIterator) Value() []byte {
 }
 
 type ListCoreRolePermissionsQuery struct {
-	RoleID int64
+	RoleIDs []int64
 }
 
 type listCoreRolePermissionsQuery struct {
@@ -205,6 +205,19 @@ func newListCoreRolePermissions(sql *legacysql.LegacyDatabaseHelper, q *ListCore
 		SQLTemplate:     sqltemplate.New(sql.DialectForDriver()),
 		PermissionTable: sql.Table("permission"),
 		Query:           q,
+	}
+}
+
+type rolePermission struct {
+	roleID int64
+	action string
+	scope  string
+}
+
+func (rp rolePermission) toCoreRolePermission() v0alpha1.CoreRolespecPermission {
+	return v0alpha1.CoreRolespecPermission{
+		Action: rp.action,
+		Scope:  rp.scope,
 	}
 }
 
@@ -247,7 +260,7 @@ func (s *sqlResourceStorageBackend) getCoreRole(ctx context.Context, sql *legacy
 	}
 	coreRole := toCoreRole(&role)
 
-	reqP := newListCoreRolePermissions(sql, &ListCoreRolePermissionsQuery{role.ID})
+	reqP := newListCoreRolePermissions(sql, &ListCoreRolePermissionsQuery{[]int64{role.ID}})
 	tmplP := sqlQueryCoreRolePermissionsTemplate
 
 	rawQueryP, err := sqltemplate.Execute(tmplP, reqP)
@@ -266,11 +279,11 @@ func (s *sqlResourceStorageBackend) getCoreRole(ctx context.Context, sql *legacy
 	}()
 	permissions := []v0alpha1.CoreRolespecPermission{}
 	for rowsP.Next() {
-		var perm v0alpha1.CoreRolespecPermission
-		if err := rowsP.Scan(&perm.Action, &perm.Scope); err != nil {
+		var perm rolePermission
+		if err := rowsP.Scan(&perm.roleID, &perm.action, &perm.scope); err != nil {
 			return nil, fmt.Errorf("scanning core role permissions for %q: %w", name, err)
 		}
-		permissions = append(permissions, perm)
+		permissions = append(permissions, perm.toCoreRolePermission())
 	}
 	coreRole.Spec.Permissions = permissions
 	return coreRole, nil
