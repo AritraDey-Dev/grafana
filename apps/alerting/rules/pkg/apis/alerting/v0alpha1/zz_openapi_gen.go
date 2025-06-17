@@ -185,6 +185,20 @@ func schema_pkg_apis_alerting_v0alpha1_AlertRuleNotificationSettings(ref common.
 							},
 						},
 					},
+					"activeTimeIntervals": {
+						SchemaProps: spec.SchemaProps{
+							Type: []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: "",
+										Type:    []string{"string"},
+										Format:  "",
+									},
+								},
+							},
+						},
+					},
 				},
 				Required: []string{"receiver"},
 			},
@@ -340,25 +354,17 @@ func schema_pkg_apis_alerting_v0alpha1_AlertRuleSpec(ref common.ReferenceCallbac
 							Format:  "",
 						},
 					},
+					"keepFiringFor": {
+						SchemaProps: spec.SchemaProps{
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
+						},
+					},
 					"missingSeriesEvalsToResolve": {
 						SchemaProps: spec.SchemaProps{
 							Type:   []string{"integer"},
 							Format: "int64",
-						},
-					},
-					"labels": {
-						SchemaProps: spec.SchemaProps{
-							Type: []string{"object"},
-							AdditionalProperties: &spec.SchemaOrBool{
-								Allows: true,
-								Schema: &spec.Schema{
-									SchemaProps: spec.SchemaProps{
-										Default: "",
-										Type:    []string{"string"},
-										Format:  "",
-									},
-								},
-							},
 						},
 					},
 					"annotations": {
@@ -376,8 +382,35 @@ func schema_pkg_apis_alerting_v0alpha1_AlertRuleSpec(ref common.ReferenceCallbac
 							},
 						},
 					},
+					"dashboardUID": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"string"},
+							Format: "",
+						},
+					},
+					"labels": {
+						SchemaProps: spec.SchemaProps{
+							Type: []string{"object"},
+							AdditionalProperties: &spec.SchemaOrBool{
+								Allows: true,
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: "",
+										Type:    []string{"string"},
+										Format:  "",
+									},
+								},
+							},
+						},
+					},
+					"panelID": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"integer"},
+							Format: "int64",
+						},
+					},
 				},
-				Required: []string{"title", "data", "interval", "noDataState", "execErrState", "for", "labels", "annotations"},
+				Required: []string{"title", "data", "interval", "noDataState", "execErrState", "for", "keepFiringFor", "annotations", "labels"},
 			},
 		},
 		Dependencies: []string{
@@ -712,8 +745,15 @@ func schema_pkg_apis_alerting_v0alpha1_RecordingRuleSpec(ref common.ReferenceCal
 							},
 						},
 					},
+					"targetDatasourceUID": {
+						SchemaProps: spec.SchemaProps{
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
+						},
+					},
 				},
-				Required: []string{"title", "data", "interval", "metric", "labels"},
+				Required: []string{"title", "data", "interval", "metric", "labels", "targetDatasourceUID"},
 			},
 		},
 		Dependencies: []string{
