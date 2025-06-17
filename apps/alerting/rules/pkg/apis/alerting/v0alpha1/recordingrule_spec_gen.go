@@ -45,12 +45,13 @@ type RecordingRuleTemplateString string
 
 // +k8s:openapi-gen=true
 type RecordingRuleSpec struct {
-	Title    string                                 `json:"title"`
-	Paused   *bool                                  `json:"paused,omitempty"`
-	Data     map[string]RecordingRuleQuery          `json:"data"`
-	Interval RecordingRulePromDuration              `json:"interval"`
-	Metric   string                                 `json:"metric"`
-	Labels   map[string]RecordingRuleTemplateString `json:"labels"`
+	Title               string                                 `json:"title"`
+	Paused              *bool                                  `json:"paused,omitempty"`
+	Data                map[string]RecordingRuleQuery          `json:"data"`
+	Interval            RecordingRulePromDuration              `json:"interval"`
+	Metric              string                                 `json:"metric"`
+	Labels              map[string]RecordingRuleTemplateString `json:"labels"`
+	TargetDatasourceUID string                                 `json:"targetDatasourceUID"`
 }
 
 // NewRecordingRuleSpec creates a new RecordingRuleSpec object.

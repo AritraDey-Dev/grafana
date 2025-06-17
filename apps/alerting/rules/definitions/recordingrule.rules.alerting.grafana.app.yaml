@@ -55,6 +55,9 @@ spec:
                                 type: string
                             paused:
                                 type: boolean
+                            targetDatasourceUID:
+                                pattern: ^[a-zA-Z0-9_]+$
+                                type: string
                             title:
                                 type: string
                         required:
@@ -63,6 +66,7 @@ spec:
                             - interval
                             - metric
                             - labels
+                            - targetDatasourceUID
                         type: object
                         x-kubernetes-preserve-unknown-fields: true
                     status:

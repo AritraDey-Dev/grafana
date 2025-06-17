@@ -41,12 +41,13 @@ type AlertRulePromDuration string
 
 // +k8s:openapi-gen=true
 type AlertRuleNotificationSettings struct {
-	Receiver          string                         `json:"receiver"`
-	GroupBy           []string                       `json:"groupBy,omitempty"`
-	GroupWait         *string                        `json:"groupWait,omitempty"`
-	GroupInterval     *string                        `json:"groupInterval,omitempty"`
-	RepeatInterval    *string                        `json:"repeatInterval,omitempty"`
-	MuteTimeIntervals []AlertRuleMuteTimeIntervalRef `json:"muteTimeIntervals,omitempty"`
+	Receiver            string                           `json:"receiver"`
+	GroupBy             []string                         `json:"groupBy,omitempty"`
+	GroupWait           *string                          `json:"groupWait,omitempty"`
+	GroupInterval       *string                          `json:"groupInterval,omitempty"`
+	RepeatInterval      *string                          `json:"repeatInterval,omitempty"`
+	MuteTimeIntervals   []AlertRuleMuteTimeIntervalRef   `json:"muteTimeIntervals,omitempty"`
+	ActiveTimeIntervals []AlertRuleActiveTimeIntervalRef `json:"activeTimeIntervals,omitempty"`
 }
 
 // NewAlertRuleNotificationSettings creates a new AlertRuleNotificationSettings object.
@@ -57,6 +58,10 @@ func NewAlertRuleNotificationSettings() *AlertRuleNotificationSettings {
 // TODO(@moustafab): validate regex for mute time interval ref
 // +k8s:openapi-gen=true
 type AlertRuleMuteTimeIntervalRef string
+
+// TODO(@moustafab): validate regex for active time interval ref
+// +k8s:openapi-gen=true
+type AlertRuleActiveTimeIntervalRef string
 
 // =~ figure out the regex for the template string
 // +k8s:openapi-gen=true
@@ -72,9 +77,12 @@ type AlertRuleSpec struct {
 	ExecErrState                string                             `json:"execErrState"`
 	NotificationSettings        []AlertRuleNotificationSettings    `json:"notificationSettings,omitempty"`
 	For                         string                             `json:"for"`
+	KeepFiringFor               string                             `json:"keepFiringFor"`
 	MissingSeriesEvalsToResolve *int64                             `json:"missingSeriesEvalsToResolve,omitempty"`
-	Labels                      map[string]AlertRuleTemplateString `json:"labels"`
 	Annotations                 map[string]AlertRuleTemplateString `json:"annotations"`
+	DashboardUID                *string                            `json:"dashboardUID,omitempty"`
+	Labels                      map[string]AlertRuleTemplateString `json:"labels"`
+	PanelID                     *int64                             `json:"panelID,omitempty"`
 }
 
 // NewAlertRuleSpec creates a new AlertRuleSpec object.
@@ -83,7 +91,7 @@ func NewAlertRuleSpec() *AlertRuleSpec {
 		Data:         map[string]AlertRuleQuery{},
 		NoDataState:  "NoData",
 		ExecErrState: "Error",
-		Labels:       map[string]AlertRuleTemplateString{},
 		Annotations:  map[string]AlertRuleTemplateString{},
+		Labels:       map[string]AlertRuleTemplateString{},
 	}
 }

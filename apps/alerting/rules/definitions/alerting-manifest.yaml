@@ -17,6 +17,8 @@ spec:
                             additionalProperties:
                                 type: string
                             type: object
+                        dashboardUID:
+                            type: string
                         data:
                             additionalProperties:
                                 properties:
@@ -61,6 +63,9 @@ spec:
                         interval:
                             pattern: ^((([0-9]+)y)?(([0-9]+)w)?(([0-9]+)d)?(([0-9]+)h)?(([0-9]+)m)?(([0-9]+)s)?|0)$
                             type: string
+                        keepFiringFor:
+                            pattern: ^((([0-9]+)y)?(([0-9]+)w)?(([0-9]+)d)?(([0-9]+)h)?(([0-9]+)m)?(([0-9]+)s)?|0)$
+                            type: string
                         labels:
                             additionalProperties:
                                 type: string
@@ -78,6 +83,10 @@ spec:
                         notificationSettings:
                             items:
                                 properties:
+                                    activeTimeIntervals:
+                                        items:
+                                            type: string
+                                        type: array
                                     groupBy:
                                         items:
                                             type: string
@@ -98,6 +107,8 @@ spec:
                                     - receiver
                                 type: object
                             type: array
+                        panelID:
+                            type: integer
                         paused:
                             type: boolean
                         title:
@@ -109,8 +120,9 @@ spec:
                         - noDataState
                         - execErrState
                         - for
-                        - labels
+                        - keepFiringFor
                         - annotations
+                        - labels
                     type: object
                     x-kubernetes-preserve-unknown-fields: true
                 status:
@@ -202,6 +214,9 @@ spec:
                             type: string
                         paused:
                             type: boolean
+                        targetDatasourceUID:
+                            pattern: ^[a-zA-Z0-9_]+$
+                            type: string
                         title:
                             type: string
                     required:
@@ -210,6 +225,7 @@ spec:
                         - interval
                         - metric
                         - labels
+                        - targetDatasourceUID
                     type: object
                     x-kubernetes-preserve-unknown-fields: true
                 status:
