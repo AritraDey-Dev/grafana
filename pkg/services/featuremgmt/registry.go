@@ -1773,6 +1773,13 @@ var (
 			Owner:       grafanaDashboardsSquad,
 			Expression:  "false",
 		},
+		{
+			Name:         "otelLogsFormatting",
+			Description:  "Applies OTel formatting templates to displayed logs",
+			Stage:        FeatureStageExperimental,
+			FrontendOnly: true,
+			Owner:        grafanaObservabilityLogsSquad,
+		},
 	}
 )
 

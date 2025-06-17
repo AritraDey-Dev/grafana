@@ -934,4 +934,8 @@ const (
 	// FlagPreferLibraryPanelTitle
 	// Prefer library panel title over viz panel title.
 	FlagPreferLibraryPanelTitle = "preferLibraryPanelTitle"
+
+	// FlagOtelLogsFormatting
+	// Applies OTel formatting templates to displayed logs
+	FlagOtelLogsFormatting = "otelLogsFormatting"
 )
