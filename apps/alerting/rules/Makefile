@@ -27,4 +27,4 @@ generate-skip-update: ## Run Grafana App SDK code generation without updating th
 
 .PHONY: do-generate
 do-generate: install-app-sdk update-app-sdk
-	@$(APP_SDK_BIN) generate --grouping=group --gogenpath=./pkg/apis --defencoding=yaml
+	@$(APP_SDK_BIN) generate --grouping=group --gogenpath=./pkg/apis --defencoding=yaml --postprocess

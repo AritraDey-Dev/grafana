@@ -12,7 +12,7 @@ alertRule: {
 	pluralName: "AlertRules"
 	current:    "v0alpha1"
 	codegen: {
-		ts: {enabled: false}
+		ts: {enabled: true}
 		go: {enabled: true}
 	}
 	versions: {
