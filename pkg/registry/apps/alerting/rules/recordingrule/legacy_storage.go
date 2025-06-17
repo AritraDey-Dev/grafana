@@ -56,6 +56,7 @@ func (s *legacyStorage) List(ctx context.Context, _ *internalversion.ListOptions
 		return nil, err
 	}
 
+	// FIXME: make it so we can get the alert rules separate from recording rules
 	rules, _, err := s.service.GetAlertRules(ctx, user)
 	if err != nil {
 		return nil, err
@@ -64,6 +65,7 @@ func (s *legacyStorage) List(ctx context.Context, _ *internalversion.ListOptions
 	return ConvertToK8sResources(user.GetOrgID(), rules, s.namespacer)
 }
 
+// FIXME: guard against the case where the user tries to get an alerting rule
 func (s *legacyStorage) Get(ctx context.Context, name string, _ *metav1.GetOptions) (runtime.Object, error) {
 	user, err := identity.GetRequester(ctx)
 	if err != nil {

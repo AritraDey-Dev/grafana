@@ -40,17 +40,13 @@ func ConvertToK8sResource(
 			ExecErrState:                string(rule.ExecErrState),
 			MissingSeriesEvalsToResolve: rule.MissingSeriesEvalsToResolve,
 			Annotations:                 make(map[string]model.AlertRuleTemplateString),
+			PanelID:                     rule.PanelID,
+			DashboardUID:                rule.DashboardUID,
 		},
 	}
 
 	for k, v := range rule.Annotations {
 		k8sRule.Spec.Annotations[k] = model.AlertRuleTemplateString(v)
-	}
-	if rule.DashboardUID != nil {
-		k8sRule.Spec.Annotations["grafana_dashboard_uid"] = model.AlertRuleTemplateString(*rule.DashboardUID)
-	}
-	if rule.PanelID != nil {
-		k8sRule.Spec.Annotations["grafana_panel_id"] = model.AlertRuleTemplateString(strconv.FormatInt(*rule.PanelID, 10))
 	}
 
 	for k, v := range rule.Labels {
@@ -85,14 +81,14 @@ func ConvertToK8sResource(
 		}
 		if setting.MuteTimeIntervals != nil {
 			nfSetting.MuteTimeIntervals = make([]model.AlertRuleMuteTimeIntervalRef, 0, len(setting.MuteTimeIntervals))
-			for range setting.MuteTimeIntervals {
-				// TODO(@rwwiv): Maybe this should be the raw string value so we aren't making multiple DB calls?
+			for _, m := range setting.MuteTimeIntervals {
+				nfSetting.MuteTimeIntervals = append(nfSetting.MuteTimeIntervals, model.AlertRuleMuteTimeIntervalRef(m))
 			}
 		}
 		if setting.ActiveTimeIntervals != nil {
 			nfSetting.ActiveTimeIntervals = make([]model.AlertRuleActiveTimeIntervalRef, 0, len(setting.ActiveTimeIntervals))
-			for range setting.ActiveTimeIntervals {
-				// TODO(@rwwiv): Maybe this should be the raw string value so we aren't making multiple DB calls?
+			for _, a := range setting.ActiveTimeIntervals {
+				nfSetting.ActiveTimeIntervals = append(nfSetting.ActiveTimeIntervals, model.AlertRuleActiveTimeIntervalRef(a))
 			}
 		}
 		k8sRule.Spec.NotificationSettings = append(k8sRule.Spec.NotificationSettings, nfSetting)
@@ -132,12 +128,12 @@ func ConvertToDomainModel(k8sRule *model.AlertRule) (*ngmodels.AlertRule, error)
 		NotificationSettings: make([]ngmodels.NotificationSettings, 0, len(k8sRule.Spec.NotificationSettings)),
 		NoDataState:          ngmodels.NoDataState(k8sRule.Spec.NoDataState),
 		ExecErrState:         ngmodels.ExecutionErrorState(k8sRule.Spec.ExecErrState),
+
+		PanelID:      k8sRule.Spec.PanelID,
+		DashboardUID: k8sRule.Spec.DashboardUID,
 	}
 
 	for k, v := range k8sRule.Spec.Annotations {
-		if k == "grafana_dashboard_uid" || k == "grafana_panel_id" {
-			continue // TODO(@rwwiv): Maybe we should include these as fields on the spec? Not a fan of this.
-		}
 		domainRule.Annotations[k] = string(v)
 	}
 
@@ -167,16 +163,6 @@ func ConvertToDomainModel(k8sRule *model.AlertRule) (*ngmodels.AlertRule, error)
 		return nil, fmt.Errorf("failed to parse interval: %w", err)
 	}
 	domainRule.IntervalSeconds = int64(interval)
-
-	// TODO: Should we include these as fields on the spec? This feels like it could be confusing.
-	dashboardUID := k8sRule.Annotations["grafana_dashboard_uid"]
-	if dashboardUID != "" {
-		domainRule.DashboardUID = &dashboardUID
-	}
-	panelID, err := strconv.ParseInt(k8sRule.Annotations["grafana_panel_id"], 10, 64)
-	if err == nil {
-		domainRule.PanelID = &panelID
-	}
 
 	for refID, query := range k8sRule.Spec.Data {
 		from, err := prom_model.ParseDuration(string(query.RelativeTimeRange.From))
@@ -210,42 +196,44 @@ func ConvertToDomainModel(k8sRule *model.AlertRule) (*ngmodels.AlertRule, error)
 
 	// Technically this is a singleton, but we'll iterate over it to be safe.
 	notifSettings := make([]ngmodels.NotificationSettings, 0, len(k8sRule.Spec.NotificationSettings))
-	for _, setting := range k8sRule.Spec.NotificationSettings {
+	for _, sourceSettings := range k8sRule.Spec.NotificationSettings {
 		settings := ngmodels.NotificationSettings{
-			Receiver: setting.Receiver,
-			GroupBy:  setting.GroupBy,
+			Receiver: sourceSettings.Receiver,
+			GroupBy:  sourceSettings.GroupBy,
 		}
-		if setting.GroupWait != nil {
-			groupWait, err := prom_model.ParseDuration(*setting.GroupWait)
+		if sourceSettings.GroupWait != nil {
+			groupWait, err := prom_model.ParseDuration(*sourceSettings.GroupWait)
 			if err != nil {
 				return nil, fmt.Errorf("failed to parse duration: %w", err)
 			}
 			settings.GroupWait = &groupWait
 		}
-		if setting.GroupInterval != nil {
-			groupInterval, err := prom_model.ParseDuration(*setting.GroupInterval)
+		if sourceSettings.GroupInterval != nil {
+			groupInterval, err := prom_model.ParseDuration(*sourceSettings.GroupInterval)
 			if err != nil {
 				return nil, fmt.Errorf("failed to parse duration: %w", err)
 			}
 			settings.GroupInterval = &groupInterval
 		}
-		if setting.RepeatInterval != nil {
-			repeatInterval, err := prom_model.ParseDuration(*setting.RepeatInterval)
+		if sourceSettings.RepeatInterval != nil {
+			repeatInterval, err := prom_model.ParseDuration(*sourceSettings.RepeatInterval)
 			if err != nil {
 				return nil, fmt.Errorf("failed to parse duration: %w", err)
 			}
 			settings.RepeatInterval = &repeatInterval
 		}
-		if setting.MuteTimeIntervals != nil {
-			settings.MuteTimeIntervals = make([]string, 0, len(setting.MuteTimeIntervals))
-			for range setting.MuteTimeIntervals {
-				// TODO(@rwwiv): Maybe this should be the raw string value so we aren't making multiple DB calls?
+		if sourceSettings.MuteTimeIntervals != nil {
+			settings.MuteTimeIntervals = make([]string, 0, len(sourceSettings.MuteTimeIntervals))
+			for _, m := range sourceSettings.MuteTimeIntervals {
+				muteInterval := string(m)
+				settings.MuteTimeIntervals = append(settings.MuteTimeIntervals, muteInterval)
 			}
 		}
-		if setting.ActiveTimeIntervals != nil {
-			settings.ActiveTimeIntervals = make([]string, 0, len(setting.ActiveTimeIntervals))
-			for range setting.ActiveTimeIntervals {
-				// TODO(@rwwiv): Maybe this should be the raw string value so we aren't making multiple DB calls?
+		if sourceSettings.ActiveTimeIntervals != nil {
+			settings.ActiveTimeIntervals = make([]string, 0, len(sourceSettings.ActiveTimeIntervals))
+			for _, a := range sourceSettings.ActiveTimeIntervals {
+				activeTimeInterval := string(a)
+				settings.ActiveTimeIntervals = append(settings.ActiveTimeIntervals, activeTimeInterval)
 			}
 		}
 		notifSettings = append(notifSettings, settings)

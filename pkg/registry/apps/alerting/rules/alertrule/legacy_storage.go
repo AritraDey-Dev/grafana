@@ -56,6 +56,7 @@ func (s *legacyStorage) List(ctx context.Context, _ *internalversion.ListOptions
 		return nil, err
 	}
 
+	// FIXME: make it so we can get the alert rules separate from recording rules
 	rules, _, err := s.service.GetAlertRules(ctx, user)
 	if err != nil {
 		return nil, err
@@ -68,6 +69,7 @@ func (s *legacyStorage) List(ctx context.Context, _ *internalversion.ListOptions
 	return resources, nil
 }
 
+// FIXME: guard against the user trying to get a recording rule
 func (s *legacyStorage) Get(ctx context.Context, name string, _ *metav1.GetOptions) (runtime.Object, error) {
 	user, err := identity.GetRequester(ctx)
 	if err != nil {

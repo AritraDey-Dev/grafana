@@ -1611,14 +1611,9 @@ github.com/grafana/grafana/apps/advisor v0.0.0-20250527064921-326081cdb7a1 h1:k7
 github.com/grafana/grafana/apps/advisor v0.0.0-20250527064921-326081cdb7a1/go.mod h1:T4eaJioKjG8GQJS6sf8xMrzWV1QZrcOjxrSf4hbBiXM=
 github.com/grafana/grafana/apps/alerting/notifications v0.0.0-20250527064921-326081cdb7a1 h1:aE74WuajAAxB3FwMlIDjpsGoGLRsk4OOMvEDBLd+fmk=
 github.com/grafana/grafana/apps/alerting/notifications v0.0.0-20250527064921-326081cdb7a1/go.mod h1:u5uyB/n3LAUJzQyvacslofKbqpmaJlbNhf5D5DuqqfQ=
-github.com/grafana/grafana/apps/alerting/rules v0.0.0-20250616205145-f6d5770da830 h1:sDOYynYq++Hjq2tmzxa1uXxRcmAK4nfnKMTOmbJCw4k=
-github.com/grafana/grafana/apps/alerting/rules v0.0.0-20250616205145-f6d5770da830/go.mod h1:uM/15blmw/x1JWSSnZINFUaaGZlis9wkJwhYg2+66Ps=
-github.com/grafana/grafana/apps/alerting/rules v0.0.0-20250617182326-4e89cf7deea8 h1:vkbHHN2mlX+mInW2ErE9vaYVH82kpmIgMZ0mezgPeX8=
-github.com/grafana/grafana/apps/alerting/rules v0.0.0-20250617182326-4e89cf7deea8/go.mod h1:eJS2NYt3rUvOAGsiyJYy21I6fBZ2+aLlkOsGCcZvorg=
-github.com/grafana/grafana/apps/alerting/rules v0.0.0-20250617184013-f48adb2a7c0f h1:CtDXTmvDG9PhiF94ZaW6L4K8U/GopMfiDsDu0eSybi0=
-github.com/grafana/grafana/apps/alerting/rules v0.0.0-20250617184013-f48adb2a7c0f/go.mod h1:eJS2NYt3rUvOAGsiyJYy21I6fBZ2+aLlkOsGCcZvorg=
-github.com/grafana/grafana/apps/dashboard v0.0.0-20250616135341-59c2f154336b h1:uCxmMbnpar9Q5uQO5mcMyL1B0ya/jvUgkSc4PNqRTCE=
-github.com/grafana/grafana/apps/dashboard v0.0.0-20250616135341-59c2f154336b/go.mod h1:OIlvNnUufYDhBXa4xK4CyzPI2C69ZJkHy5+aFDyPtXw=
+github.com/grafana/grafana/apps/alerting/rules v0.0.0-20250617185418-073e1195cf26 h1:x8sAxGSOPFQ5lDZ6OUyZE5k/Ko04BPNp+TUd+LNYOnQ=
+github.com/grafana/grafana/apps/alerting/rules v0.0.0-20250617185418-073e1195cf26/go.mod h1:dnyn8aVgSsZXFk7G6vf5DEcxy4ZtzPR1e9XuZUs1z1k=
+github.com/grafana/grafana/apps/dashboard v0.0.0-20250616215703-eb4de388c3cf h1:4dylGFxAO/B2up1n5x4smAVdfTYkStSExS3WaLD5jXY=
 github.com/grafana/grafana/apps/dashboard v0.0.0-20250616215703-eb4de388c3cf/go.mod h1:XcJIUxPfKAhDb9mx9jHeV9U2xVA2WgE93ukd4Bx8U/M=
 github.com/grafana/grafana/apps/folder v0.0.0-20250527064921-326081cdb7a1 h1:SkVUcSlXIUi46gSGfe5/Xqn2p51c/unmkZRDX+274Os=
 github.com/grafana/grafana/apps/folder v0.0.0-20250527064921-326081cdb7a1/go.mod h1:z9u5VFG9q1CcIt62c9RIP8dEWHX81NdiPCjtpKKeuFU=
@@ -1634,8 +1629,6 @@ github.com/grafana/grafana/pkg/apis/secret v0.0.0-20250527064921-326081cdb7a1 h1
 github.com/grafana/grafana/pkg/apis/secret v0.0.0-20250527064921-326081cdb7a1/go.mod h1:Fq5yeCrxqwbvhvHLXekhDVzpK5P2a0tgV2JfLUDOCM8=
 github.com/grafana/grafana/pkg/apiserver v0.0.0-20250527064921-326081cdb7a1 h1:KYmCdYLJ2sBJtvwApasjp6XSONrZJrJPOYpqn1uSivA=
 github.com/grafana/grafana/pkg/apiserver v0.0.0-20250527064921-326081cdb7a1/go.mod h1:sDbqUtVpLKw6/zVawXnauo/eqgBL0IvvLONMa2brWg0=
-github.com/grafana/grafana/pkg/build v0.0.0-20250616192734-c00caa2fb202 h1:x/PZhjbCmj/nTWDQDuTCJlSeG+lpJ1JqaRTiwspoW4U=
-github.com/grafana/grafana/pkg/build v0.0.0-20250616192734-c00caa2fb202/go.mod h1:6AYYcTbWp5ujXDs8O038kUlkSreY3UXMUbB2czFl7i8=
 github.com/grafana/grafana/pkg/promlib v0.0.8 h1:VUWsqttdf0wMI4j9OX9oNrykguQpZcruudDAFpJJVw0=
 github.com/grafana/grafana/pkg/promlib v0.0.8/go.mod h1:U1ezG/MGaEPoThqsr3lymMPN5yIPdVTJnDZ+wcXT+ao=
 github.com/grafana/grafana/pkg/semconv v0.0.0-20250527064921-326081cdb7a1 h1:H37QjQ9bMNzR8R6OCmc6b8WCDfas27oQ0Vmkur2ar/M=
