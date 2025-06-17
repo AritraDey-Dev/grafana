@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"strconv"
 
-	model "github.com/grafana/grafana/apps/alerting/rules/pkg/apis/recordingrule/v0alpha1"
+	model "github.com/grafana/grafana/apps/alerting/rules/pkg/apis/alerting/v0alpha1"
 	"github.com/grafana/grafana/pkg/services/apiserver/endpoints/request"
 	ngmodels "github.com/grafana/grafana/pkg/services/ngalert/models"
 	"github.com/grafana/grafana/pkg/util"

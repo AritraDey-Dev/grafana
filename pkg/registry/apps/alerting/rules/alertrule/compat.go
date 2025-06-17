@@ -10,7 +10,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
 
-	model "github.com/grafana/grafana/apps/alerting/rules/pkg/apis/alertrule/v0alpha1"
+	model "github.com/grafana/grafana/apps/alerting/rules/pkg/apis/alerting/v0alpha1"
 	"github.com/grafana/grafana/pkg/services/apiserver/endpoints/request"
 	ngmodels "github.com/grafana/grafana/pkg/services/ngalert/models"
 	prom_model "github.com/prometheus/common/model"
@@ -238,13 +238,13 @@ func ConvertToDomainModel(k8sRule *model.AlertRule) (*ngmodels.AlertRule, error)
 		}
 		if setting.MuteTimeIntervals != nil {
 			settings.MuteTimeIntervals = make([]string, 0, len(setting.MuteTimeIntervals))
-			for _ = range setting.MuteTimeIntervals {
+			for range setting.MuteTimeIntervals {
 				// TODO(@rwwiv): Maybe this should be the raw string value so we aren't making multiple DB calls?
 			}
 		}
 		if setting.ActiveTimeIntervals != nil {
 			settings.ActiveTimeIntervals = make([]string, 0, len(setting.ActiveTimeIntervals))
-			for _ = range setting.ActiveTimeIntervals {
+			for range setting.ActiveTimeIntervals {
 				// TODO(@rwwiv): Maybe this should be the raw string value so we aren't making multiple DB calls?
 			}
 		}
