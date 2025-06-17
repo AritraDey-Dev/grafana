@@ -57,7 +57,7 @@ func newListCoreRoles(sql *legacysql.LegacyDatabaseHelper, q *ListCoreRolesQuery
 	}
 }
 
-func (s *sqlResourceStorageBackend) getRows(ctx context.Context, sql *legacysql.LegacyDatabaseHelper, query *ListCoreRolesQuery) (*rowsWrapper, error) {
+func (s *sqlResourceStorageBackend) getIterator(ctx context.Context, sql *legacysql.LegacyDatabaseHelper, query *ListCoreRolesQuery) (*listIterator, error) {
 	req := newListCoreRoles(sql, query)
 	tmpl := sqlQueryCoreRolesTemplate
 
@@ -73,15 +73,15 @@ func (s *sqlResourceStorageBackend) getRows(ctx context.Context, sql *legacysql.
 		}
 		rows = nil
 	}
-	return &rowsWrapper{
+	return &listIterator{
 		s:    s,
 		rows: rows,
 	}, err
 }
 
-var _ resource.ListIterator = (*rowsWrapper)(nil)
+var _ resource.ListIterator = (*listIterator)(nil)
 
-type rowsWrapper struct {
+type listIterator struct {
 	s    *sqlResourceStorageBackend
 	rows *sql.Rows
 
@@ -97,7 +97,7 @@ type rowsWrapper struct {
 	rejected []v0alpha1.CoreRole
 }
 
-func (r *rowsWrapper) Close() error {
+func (r *listIterator) Close() error {
 	if r.rows != nil {
 		return r.rows.Close()
 	}
@@ -105,27 +105,27 @@ func (r *rowsWrapper) Close() error {
 }
 
 // ContinueToken implements resource.ListIterator.
-func (r *rowsWrapper) ContinueToken() string {
+func (r *listIterator) ContinueToken() string {
 	return r.token.String()
 }
 
 // Error implements resource.ListIterator.
-func (r *rowsWrapper) Error() error {
+func (r *listIterator) Error() error {
 	return r.err
 }
 
 // Folder implements resource.ListIterator.
-func (r *rowsWrapper) Folder() string {
+func (r *listIterator) Folder() string {
 	return ""
 }
 
 // Name implements resource.ListIterator.
-func (r *rowsWrapper) Name() string {
+func (r *listIterator) Name() string {
 	return r.row.Name
 }
 
 // Namespace implements resource.ListIterator.
-func (r *rowsWrapper) Namespace() string {
+func (r *listIterator) Namespace() string {
 	return ""
 }
 
@@ -147,7 +147,7 @@ func toCoreRole(roleDTO *accesscontrol.RoleDTO) *v0alpha1.CoreRole {
 }
 
 // Next implements resource.ListIterator.
-func (r *rowsWrapper) Next() bool {
+func (r *listIterator) Next() bool {
 	if r.err != nil {
 		return false
 	}
@@ -177,12 +177,12 @@ func (r *rowsWrapper) Next() bool {
 }
 
 // ResourceVersion implements resource.ListIterator.
-func (r *rowsWrapper) ResourceVersion() int64 {
+func (r *listIterator) ResourceVersion() int64 {
 	return r.row.Spec.Version
 }
 
 // Value implements resource.ListIterator.
-func (r *rowsWrapper) Value() []byte {
+func (r *listIterator) Value() []byte {
 	b, err := json.Marshal(r.row)
 	r.err = err
 	return b

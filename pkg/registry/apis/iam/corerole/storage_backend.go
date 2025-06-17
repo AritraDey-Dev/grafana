@@ -113,7 +113,7 @@ func (s *sqlResourceStorageBackend) ListIterator(ctx context.Context, req *resou
 	}
 
 	listRV *= 1000
-	rows, err := s.getRows(ctx, sql, query)
+	rows, err := s.getIterator(ctx, sql, query)
 	if rows != nil {
 		defer func() {
 			_ = rows.Close()
