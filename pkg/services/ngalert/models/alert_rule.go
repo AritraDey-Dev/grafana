@@ -848,6 +848,14 @@ type GetAlertRulesGroupByRuleUIDQuery struct {
 	OrgID int64
 }
 
+type RuleTypeFilter int
+
+const (
+	RuleTypeFilterAll RuleTypeFilter = iota
+	RuleTypeFilterAlerting
+	RuleTypeFilterRecording
+)
+
 // ListAlertRulesQuery is the query for listing alert rules
 type ListAlertRulesQuery struct {
 	OrgID         int64
@@ -865,6 +873,8 @@ type ListAlertRulesQuery struct {
 	TimeIntervalName string
 
 	HasPrometheusRuleDefinition *bool
+
+	RuleType RuleTypeFilter
 }
 
 // CountAlertRulesQuery is the query for counting alert rules

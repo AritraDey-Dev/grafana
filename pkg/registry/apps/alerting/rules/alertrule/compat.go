@@ -16,11 +16,19 @@ import (
 	prom_model "github.com/prometheus/common/model"
 )
 
+var (
+	invalidRuleError = fmt.Errorf("rule is not a alerting rule")
+)
+
 func ConvertToK8sResource(
 	orgID int64,
 	rule *ngmodels.AlertRule,
 	namespaceMapper request.NamespaceMapper,
 ) (*model.AlertRule, error) {
+	if rule.Type() != ngmodels.RuleTypeAlerting {
+		return nil, invalidRuleError
+	}
+
 	k8sRule := &model.AlertRule{
 		ObjectMeta: metav1.ObjectMeta{
 			UID:       types.UID(rule.UID),

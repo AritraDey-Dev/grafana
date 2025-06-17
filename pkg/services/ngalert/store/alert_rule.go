@@ -639,6 +639,17 @@ func (st DBstore) ListAlertRules(ctx context.Context, query *ngmodels.ListAlertR
 			}
 		}
 
+		switch query.RuleType {
+		case ngmodels.RuleTypeFilterAlerting:
+			q = q.Where("record = null")
+		case ngmodels.RuleTypeFilterRecording:
+			q = q.Where("record != null")
+		case ngmodels.RuleTypeFilterAll:
+			// no additional filter
+		default:
+			return fmt.Errorf("unknown rule type filter %q", query.RuleType)
+		}
+
 		q = q.Asc("namespace_uid", "rule_group", "rule_group_idx", "id")
 
 		alertRules := make([]*ngmodels.AlertRule, 0)

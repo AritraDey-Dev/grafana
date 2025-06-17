@@ -2,9 +2,10 @@ package alertrule
 
 import (
 	"context"
+	"errors"
 	"fmt"
 
-	"k8s.io/apimachinery/pkg/api/errors"
+	k8serrors "k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/apis/meta/internalversion"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
@@ -14,7 +15,7 @@ import (
 	"github.com/grafana/grafana/pkg/apimachinery/identity"
 	grafanarest "github.com/grafana/grafana/pkg/apiserver/rest"
 	"github.com/grafana/grafana/pkg/services/apiserver/endpoints/request"
-	"github.com/grafana/grafana/pkg/services/ngalert/models"
+	ngmodels "github.com/grafana/grafana/pkg/services/ngalert/models"
 	"github.com/grafana/grafana/pkg/services/ngalert/provisioning"
 )
 
@@ -56,8 +57,7 @@ func (s *legacyStorage) List(ctx context.Context, _ *internalversion.ListOptions
 		return nil, err
 	}
 
-	// FIXME: make it so we can get the alert rules separate from recording rules
-	rules, _, err := s.service.GetAlertRules(ctx, user)
+	rules, _, err := s.service.GetFilteredRules(ctx, user, ngmodels.RuleTypeFilterAlerting)
 	if err != nil {
 		return nil, err
 	}
@@ -69,7 +69,6 @@ func (s *legacyStorage) List(ctx context.Context, _ *internalversion.ListOptions
 	return resources, nil
 }
 
-// FIXME: guard against the user trying to get a recording rule
 func (s *legacyStorage) Get(ctx context.Context, name string, _ *metav1.GetOptions) (runtime.Object, error) {
 	user, err := identity.GetRequester(ctx)
 	if err != nil {
@@ -81,7 +80,11 @@ func (s *legacyStorage) Get(ctx context.Context, name string, _ *metav1.GetOptio
 		return nil, err
 	}
 
-	return ConvertToK8sResource(user.GetOrgID(), &rule, s.namespacer)
+	obj, err := ConvertToK8sResource(user.GetOrgID(), &rule, s.namespacer)
+	if err != nil && errors.Is(err, invalidRuleError) {
+		return nil, k8serrors.NewNotFound(ResourceInfo.GroupResource(), name)
+	}
+	return obj, err
 }
 
 func (s *legacyStorage) Create(ctx context.Context, obj runtime.Object, _ rest.ValidateObjectFunc, _ *metav1.CreateOptions) (runtime.Object, error) {
@@ -95,7 +98,7 @@ func (s *legacyStorage) Create(ctx context.Context, obj runtime.Object, _ rest.V
 		return nil, fmt.Errorf("expected alert rule but got %T", obj)
 	}
 	if p.Name != "" {
-		return nil, errors.NewBadRequest("object's metadata.name should be empty")
+		return nil, k8serrors.NewBadRequest("object's metadata.name should be empty")
 	}
 
 	model, err := ConvertToDomainModel(p)
@@ -103,7 +106,7 @@ func (s *legacyStorage) Create(ctx context.Context, obj runtime.Object, _ rest.V
 		return nil, err
 	}
 
-	created, err := s.service.CreateAlertRule(ctx, user, *model, models.ProvenanceNone)
+	created, err := s.service.CreateAlertRule(ctx, user, *model, ngmodels.ProvenanceNone)
 	if err != nil {
 		return nil, err
 	}
@@ -141,7 +144,7 @@ func (s *legacyStorage) Update(ctx context.Context, name string, objInfo rest.Up
 		return old, false, err
 	}
 
-	updated, err := s.service.UpdateAlertRule(ctx, user, *model, models.ProvenanceNone)
+	updated, err := s.service.UpdateAlertRule(ctx, user, *model, ngmodels.ProvenanceNone)
 	if err != nil {
 		return nil, false, err
 	}
@@ -170,7 +173,7 @@ func (s *legacyStorage) Delete(ctx context.Context, name string, deleteValidatio
 		}
 	}
 
-	err = s.service.DeleteAlertRule(ctx, user, name, models.ProvenanceNone)
+	err = s.service.DeleteAlertRule(ctx, user, name, ngmodels.ProvenanceNone)
 	if err != nil {
 		return old, false, err
 	}
@@ -180,5 +183,5 @@ func (s *legacyStorage) Delete(ctx context.Context, name string, deleteValidatio
 
 func (s *legacyStorage) DeleteCollection(_ context.Context, _ rest.ValidateObjectFunc, _ *metav1.DeleteOptions, _ *internalversion.ListOptions) (runtime.Object, error) {
 	// TODO: should we support this?
-	return nil, errors.NewMethodNotSupported(ResourceInfo.GroupResource(), "delete")
+	return nil, k8serrors.NewMethodNotSupported(ResourceInfo.GroupResource(), "delete")
 }

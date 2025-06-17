@@ -14,15 +14,18 @@ import (
 	"k8s.io/apimachinery/pkg/types"
 )
 
+var (
+	invalidRuleError = fmt.Errorf("rule is not a recording rule")
+)
+
 func ConvertToK8sResource(
 	orgID int64,
 	rule *ngmodels.AlertRule,
 	namespaceMapper request.NamespaceMapper,
 ) (*model.RecordingRule, error) {
-	if rule.Record == nil {
-		return nil, fmt.Errorf("rule is not a recording rule")
+	if rule.Type() != ngmodels.RuleTypeRecording {
+		return nil, invalidRuleError
 	}
-
 	k8sRule := &model.RecordingRule{
 		ObjectMeta: metav1.ObjectMeta{
 			UID:       types.UID(rule.UID),
