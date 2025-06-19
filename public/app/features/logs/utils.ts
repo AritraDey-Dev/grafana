@@ -395,15 +395,7 @@ export function getLabelTypeFromRow(label: string, row: LogRowModel) {
   if (!row.datasourceType) {
     return null;
   }
-  const idField = row.dataFrame.fields.find((field) => field.name === 'id');
-  if (!idField) {
-    return null;
-  }
-  const rowIndex = idField.values.findIndex((id) => id === row.rowId);
-  if (rowIndex < 0) {
-    return null;
-  }
-  const labelType = getLabelTypeFromFrame(label, row.dataFrame, rowIndex);
+  const labelType = getLabelTypeFromFrame(label, row.dataFrame, row.rowIndex);
   if (!labelType) {
     return null;
   }
