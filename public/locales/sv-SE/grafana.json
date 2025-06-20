@@ -1065,6 +1065,9 @@
     "error-summary-button": {
       "content-show-all-errors": "Visa alla fel"
     },
+    "errors": {
+      "failedWith": ""
+    },
     "evaluate-every-validation-options": {
       "message": {
         "required": ""
@@ -3267,9 +3270,6 @@
       "search-placeholder": "Sök mappar",
       "unknown-error": "Okänt fel"
     },
-    "hard-delete": {
-      "success": "Instrumentpanelen {{name}} har raderats"
-    },
     "manage-folder-nav": {
       "alert-rules": "Varningsregler",
       "dashboards": "Instrumentpaneler",
@@ -3306,6 +3306,9 @@
     "no-results": {
       "clear": "Rensa sökning och filter",
       "text": "Inga resultat hittades för din fråga"
+    },
+    "restore": {
+      "success": ""
     },
     "text-this-repository-is-read-only": "Om du har direkt åtkomst till målet kopierar du JSON och klistrar in den där."
   },
@@ -4055,6 +4058,7 @@
     },
     "edit-actions": {
       "add": "",
+      "move": "",
       "panel-background": "",
       "panel-description": "",
       "panel-title": "",
@@ -5037,6 +5041,15 @@
         }
       }
     },
+    "delete-provisioned-dashboard-form": {
+      "api-error": "",
+      "cancel-action": "Avbryt",
+      "delete-action": "Ta bort instrumentpanel",
+      "delete-read-only-file-message": "",
+      "deleting": "Tar bort ...",
+      "drawer-title": "",
+      "title-this-repository-is-read-only": "Den här databasen är skrivskyddad"
+    },
     "description-label": {
       "description": "Beskrivning"
     },
@@ -5046,6 +5059,9 @@
           "edit-link": "Redigera länk"
         }
       }
+    },
+    "edit-provisioned-dashboard-form": {
+      "success": ""
     },
     "email-list": {
       "aria-label-emailmenu": "Växla e-postmeny"
@@ -5319,24 +5335,25 @@
       "affected-dashboards_one": "Denna uppdatering kommer att påverka <1>{{count}} instrumentpaneler.</1> Följande instrumentpaneler som använder panelen kommer att påverkas:",
       "affected-dashboards_other": "Denna uppdatering kommer att påverka <1>{{count}} instrumentpaneler.</1> Följande instrumentpaneler som använder panelen kommer att påverkas:"
     },
+    "save-or-delete-provisioned-dashboard-form": {
+      "dashboard-comment-placeholder-describe-changes-optional": "Lägg till en anteckning för att beskriva dina ändringar (valfritt)",
+      "description-branch-name-in-git-hub": "Grennamn i GitHub",
+      "description-inside-repository": "Filsökväg inuti databasen (.json eller .yaml)",
+      "label-branch": "Gren",
+      "label-comment": "Kommentar",
+      "label-path": "Sökväg",
+      "label-workflow": "Arbetsflöde"
+    },
     "save-provisioned-dashboard-form": {
       "api-error": "Fel när instrumentpanel skulle sparas",
-      "api-success": "Ändringarna i instrumentpanelen har sparats",
       "cancel": "Avbryt",
       "cannot-be-saved": "Denna instrumentpanel kan inte sparas från Grafanas användargränssnitt eftersom det har provisionerats från en annan källa. Kopiera JSON eller spara den till en fil nedan, så du kan uppdatera instrumentpanelen i provisioneringskällan.",
       "copy-json-message": "Om du har direkt åtkomst till målet kopierar du JSON och klistrar in den där.",
       "copy-json-to-clipboard": "Kopiera JSON till urklippet",
-      "dashboard-comment-placeholder-describe-changes-optional": "Lägg till en anteckning för att beskriva dina ändringar (valfritt)",
-      "description-branch-name-in-git-hub": "Grennamn i GitHub",
-      "description-inside-repository": "Filsökväg inuti databasen (.json eller .yaml)",
       "file-path": "<0>Filsökväg:</0> {{filePath}}",
-      "label-branch": "Gren",
-      "label-comment": "Kommentar",
       "label-description": "Beskrivning",
-      "label-path": "Sökväg",
       "label-target-folder": "Målmapp",
       "label-title": "Titel",
-      "label-workflow": "Arbetsflöde",
       "save": "Spara",
       "save-json-to-file": "Spara JSON till fil",
       "saving": "Sparar ...",
@@ -8505,9 +8522,6 @@
     "rss-button": "Senaste från bloggen"
   },
   "news": {
-    "drawer": {
-      "close": "Stäng låda"
-    },
     "link-title": "Gå till Grafana Labs blogg",
     "news-panel": {
       "body-error-loading-rss-feed": "",
@@ -9753,7 +9767,6 @@
   },
   "recently-deleted": {
     "buttons": {
-      "delete": "Radera permanent",
       "restore": "Återställ"
     },
     "page": {

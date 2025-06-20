@@ -1077,6 +1077,9 @@
     "error-summary-button": {
       "content-show-all-errors": "Показать все ошибки"
     },
+    "errors": {
+      "failedWith": ""
+    },
     "evaluate-every-validation-options": {
       "message": {
         "required": ""
@@ -3303,9 +3306,6 @@
       "search-placeholder": "Поиск папок",
       "unknown-error": "Неизвестная ошибка"
     },
-    "hard-delete": {
-      "success": "Дашборд {{name}} удален"
-    },
     "manage-folder-nav": {
       "alert-rules": "Правила оповещения",
       "dashboards": "Дашборды",
@@ -3342,6 +3342,9 @@
     "no-results": {
       "clear": "Очистить поиск и фильтры",
       "text": "По вашему запросу ничего не найдено"
+    },
+    "restore": {
+      "success": ""
     },
     "text-this-repository-is-read-only": "Если у вас есть прямой доступ к целевому объекту, скопируйте JSON-файл и вставьте его туда."
   },
@@ -4091,6 +4094,7 @@
     },
     "edit-actions": {
       "add": "",
+      "move": "",
       "panel-background": "",
       "panel-description": "",
       "panel-title": "",
@@ -5075,6 +5079,15 @@
         }
       }
     },
+    "delete-provisioned-dashboard-form": {
+      "api-error": "",
+      "cancel-action": "Отмена",
+      "delete-action": "Удалить дашборд",
+      "delete-read-only-file-message": "",
+      "deleting": "Удаление...",
+      "drawer-title": "",
+      "title-this-repository-is-read-only": "Репозиторий предназначен только для чтения"
+    },
     "description-label": {
       "description": "Описание"
     },
@@ -5084,6 +5097,9 @@
           "edit-link": "Редактировать ссылку"
         }
       }
+    },
+    "edit-provisioned-dashboard-form": {
+      "success": ""
     },
     "email-list": {
       "aria-label-emailmenu": "Переключить меню электронной почты"
@@ -5361,24 +5377,25 @@
       "affected-dashboards_many": "Обновление затронет <1>{{count}} дашбордов.</1> Будут затронуты следующие дашборды, использующие панель:",
       "affected-dashboards_other": "Обновление затронет <1>{{count}} дашбордов.</1> Будут затронуты следующие дашборды, использующие панель:"
     },
+    "save-or-delete-provisioned-dashboard-form": {
+      "dashboard-comment-placeholder-describe-changes-optional": "Добавьте примечание с описанием изменений (необязательно)",
+      "description-branch-name-in-git-hub": "Имя ветви в GitHub",
+      "description-inside-repository": "Путь к файлу внутри репозитория (.json или .yaml)",
+      "label-branch": "Ветвь",
+      "label-comment": "Комментарий",
+      "label-path": "Путь",
+      "label-workflow": "Рабочий процесс"
+    },
     "save-provisioned-dashboard-form": {
       "api-error": "Ошибка при сохранении дашборда",
-      "api-success": "Изменения в дашборде сохранены",
       "cancel": "Отмена",
       "cannot-be-saved": "Дашборд невозможно сохранить из пользовательского интерфейса Grafana, поскольку он подготовлен в другом источнике. Скопируйте модель JSON или сохраните ее в файл ниже. Затем можно обновить свой дашборд в источнике подготовки.",
       "copy-json-message": "Если у вас есть прямой доступ к целевому объекту, скопируйте JSON-файл и вставьте его туда.",
       "copy-json-to-clipboard": "Копировать JSON в буфер обмена",
-      "dashboard-comment-placeholder-describe-changes-optional": "Добавьте примечание с описанием изменений (необязательно)",
-      "description-branch-name-in-git-hub": "Имя ветви в GitHub",
-      "description-inside-repository": "Путь к файлу внутри репозитория (.json или .yaml)",
       "file-path": "<0>Путь к файлу:</0> {{filePath}}",
-      "label-branch": "Ветвь",
-      "label-comment": "Комментарий",
       "label-description": "Описание",
-      "label-path": "Путь",
       "label-target-folder": "Целевая папка",
       "label-title": "Название",
-      "label-workflow": "Рабочий процесс",
       "save": "Сохранить",
       "save-json-to-file": "Сохранить модель JSON в файл",
       "saving": "Сохранение...",
@@ -8557,9 +8574,6 @@
     "rss-button": "Последние записи в блоге"
   },
   "news": {
-    "drawer": {
-      "close": "Закрыть выдвижную панель"
-    },
     "link-title": "Перейти в блог Grafana Labs",
     "news-panel": {
       "body-error-loading-rss-feed": "",
@@ -9815,7 +9829,6 @@
   },
   "recently-deleted": {
     "buttons": {
-      "delete": "Удалить навсегда",
       "restore": "Восстановить"
     },
     "page": {

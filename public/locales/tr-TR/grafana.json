@@ -1065,6 +1065,9 @@
     "error-summary-button": {
       "content-show-all-errors": "Tüm hataları göster"
     },
+    "errors": {
+      "failedWith": ""
+    },
     "evaluate-every-validation-options": {
       "message": {
         "required": ""
@@ -3267,9 +3270,6 @@
       "search-placeholder": "Klasör ara",
       "unknown-error": "Bilinmeyen hata"
     },
-    "hard-delete": {
-      "success": "{{name}} panosu silindi"
-    },
     "manage-folder-nav": {
       "alert-rules": "Uyarı kuralları",
       "dashboards": "Panolar",
@@ -3306,6 +3306,9 @@
     "no-results": {
       "clear": "Aramayı ve filtreleri temizle",
       "text": "Sorgunuz için sonuç bulunamadı"
+    },
+    "restore": {
+      "success": ""
     },
     "text-this-repository-is-read-only": "Hedefe doğrudan erişiminiz varsa JSON'u kopyalayıp oraya yapıştırın."
   },
@@ -4055,6 +4058,7 @@
     },
     "edit-actions": {
       "add": "",
+      "move": "",
       "panel-background": "",
       "panel-description": "",
       "panel-title": "",
@@ -5037,6 +5041,15 @@
         }
       }
     },
+    "delete-provisioned-dashboard-form": {
+      "api-error": "",
+      "cancel-action": "İptal et",
+      "delete-action": "Panoyu sil",
+      "delete-read-only-file-message": "",
+      "deleting": "Siliniyor...",
+      "drawer-title": "",
+      "title-this-repository-is-read-only": "Bu depo salt okunur"
+    },
     "description-label": {
       "description": "Açıklama"
     },
@@ -5046,6 +5059,9 @@
           "edit-link": "Bağlantıyı düzenle"
         }
       }
+    },
+    "edit-provisioned-dashboard-form": {
+      "success": ""
     },
     "email-list": {
       "aria-label-emailmenu": "E-posta menüsünü aç/kapat"
@@ -5319,24 +5335,25 @@
       "affected-dashboards_one": "Bu güncelleme <1>{{count}} panoyu etkileyecek.</1> Paneli kullanan aşağıdaki panolar etkilenecek:",
       "affected-dashboards_other": "Bu güncelleme <1>{{count}} panoyu etkileyecek.</1> Paneli kullanan aşağıdaki panolar etkilenecek:"
     },
+    "save-or-delete-provisioned-dashboard-form": {
+      "dashboard-comment-placeholder-describe-changes-optional": "Değişikliklerinizi açıklayan bir not ekleyin (isteğe bağlı)",
+      "description-branch-name-in-git-hub": "GitHub'daki dal adı",
+      "description-inside-repository": "Depo içindeki dosya yolu (.json veya .yaml)",
+      "label-branch": "Dal",
+      "label-comment": "Yorum",
+      "label-path": "Yol",
+      "label-workflow": "İş akışı"
+    },
     "save-provisioned-dashboard-form": {
       "api-error": "Pano kaydedilirken hata oluştu",
-      "api-success": "Pano değişiklikleri kaydedildi",
       "cancel": "İptal",
       "cannot-be-saved": "Bu pano başka bir kaynaktan sağlandığı için Grafana kullanıcı arayüzünden kaydedilemez. JSON'u kopyalayın veya aşağıdan bir dosyaya kaydedin, ardından sağlama kaynağındaki panonuzu güncelleyebilirsiniz.",
       "copy-json-message": "Hedefe doğrudan erişiminiz varsa JSON'u kopyalayıp oraya yapıştırın.",
       "copy-json-to-clipboard": "JSON'u panoya kopyala",
-      "dashboard-comment-placeholder-describe-changes-optional": "Değişikliklerinizi açıklayan bir not ekleyin (isteğe bağlı)",
-      "description-branch-name-in-git-hub": "GitHub'daki dal adı",
-      "description-inside-repository": "Depo içindeki dosya yolu (.json veya .yaml)",
       "file-path": "<0>Dosya yolu:</0> {{filePath}} ",
-      "label-branch": "Dal",
-      "label-comment": "Yorum",
       "label-description": "Açıklama",
-      "label-path": "Yol",
       "label-target-folder": "Hedef klasör",
       "label-title": "Başlık",
-      "label-workflow": "İş akışı",
       "save": "Kaydet",
       "save-json-to-file": "JSON'u dosyaya kaydet",
       "saving": "Kaydediliyor…",
@@ -8505,9 +8522,6 @@
     "rss-button": "Blog'tan son gönderiler"
   },
   "news": {
-    "drawer": {
-      "close": "Çekmeceyi kapat"
-    },
     "link-title": "Grafana Labs bloguna git",
     "news-panel": {
       "body-error-loading-rss-feed": "",
@@ -9753,7 +9767,6 @@
   },
   "recently-deleted": {
     "buttons": {
-      "delete": "Kalıcı olarak sil",
       "restore": "Geri yükle"
     },
     "page": {

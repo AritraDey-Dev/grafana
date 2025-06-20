@@ -1065,6 +1065,9 @@
     "error-summary-button": {
       "content-show-all-errors": "Összes hiba megjelenítése"
     },
+    "errors": {
+      "failedWith": ""
+    },
     "evaluate-every-validation-options": {
       "message": {
         "required": ""
@@ -3267,9 +3270,6 @@
       "search-placeholder": "Mappák keresése",
       "unknown-error": "Ismeretlen hiba"
     },
-    "hard-delete": {
-      "success": "A(z) {{name}} irányítópult törölve"
-    },
     "manage-folder-nav": {
       "alert-rules": "Riasztási szabályok",
       "dashboards": "Irányítópultok",
@@ -3306,6 +3306,9 @@
     "no-results": {
       "clear": "Keresés és szűrők törlése",
       "text": "Nincs találat a lekérdezésre"
+    },
+    "restore": {
+      "success": ""
     },
     "text-this-repository-is-read-only": "Ha közvetlen hozzáférése van a célhoz, másolja ki a JSON-kódot, és illessze be oda."
   },
@@ -4055,6 +4058,7 @@
     },
     "edit-actions": {
       "add": "",
+      "move": "",
       "panel-background": "",
       "panel-description": "",
       "panel-title": "",
@@ -5037,6 +5041,15 @@
         }
       }
     },
+    "delete-provisioned-dashboard-form": {
+      "api-error": "",
+      "cancel-action": "Mégse",
+      "delete-action": "Irányítópult törlése",
+      "delete-read-only-file-message": "",
+      "deleting": "Törlés...",
+      "drawer-title": "",
+      "title-this-repository-is-read-only": "Ez az adattár csak olvasható"
+    },
     "description-label": {
       "description": "Leírás"
     },
@@ -5046,6 +5059,9 @@
           "edit-link": "Hivatkozás szerkesztése"
         }
       }
+    },
+    "edit-provisioned-dashboard-form": {
+      "success": ""
     },
     "email-list": {
       "aria-label-emailmenu": "E-mail-menü ki- és bekapcsolása"
@@ -5319,24 +5335,25 @@
       "affected-dashboards_one": "Ez a frissítés <1>{{count}} irányítópultot érint.</1> A panelt használó következő irányítópultokat érinti:",
       "affected-dashboards_other": "Ez a frissítés <1>{{count}} irányítópultot érint.</1> A panelt használó következő irányítópultokat érinti:"
     },
+    "save-or-delete-provisioned-dashboard-form": {
+      "dashboard-comment-placeholder-describe-changes-optional": "Megjegyzés hozzáadása a módosítások leírásához (nem kötelező)",
+      "description-branch-name-in-git-hub": "Ág neve a GitHubon",
+      "description-inside-repository": "Fájl útvonala az adattáron belül (.json vagy .yaml)",
+      "label-branch": "Ág",
+      "label-comment": "Megjegyzés",
+      "label-path": "Útvonal",
+      "label-workflow": "Munkafolyamat"
+    },
     "save-provisioned-dashboard-form": {
       "api-error": "Hiba történt az irányítópult mentésekor",
-      "api-success": "Irányítópult-módosítások mentve",
       "cancel": "Mégse",
       "cannot-be-saved": "Ez az irányítópult nem menthető a Grafana kezelőfelületéből, mert egy másik forrásból van kiépítve. Másolja a JSON-t, vagy mentse fájlba az alábbiakban, majd frissítheti az irányítópultot a kiépítési forrásban.",
       "copy-json-message": "Ha közvetlen hozzáférése van a célhoz, másolja ki a JSON-kódot, és illessze be oda.",
       "copy-json-to-clipboard": "JSON másolása a vágólapra",
-      "dashboard-comment-placeholder-describe-changes-optional": "Megjegyzés hozzáadása a módosítások leírásához (nem kötelező)",
-      "description-branch-name-in-git-hub": "Ág neve a GitHubon",
-      "description-inside-repository": "Fájl útvonala az adattáron belül (.json vagy .yaml)",
       "file-path": "<0>Fájl útvonala:</0> {{filePath}}",
-      "label-branch": "Ág",
-      "label-comment": "Megjegyzés",
       "label-description": "Leírás",
-      "label-path": "Útvonal",
       "label-target-folder": "Célmappa",
       "label-title": "Cím",
-      "label-workflow": "Munkafolyamat",
       "save": "Mentés",
       "save-json-to-file": "JSON mentése fájlba",
       "saving": "Mentés...",
@@ -8505,9 +8522,6 @@
     "rss-button": "Újdonságok a blogról"
   },
   "news": {
-    "drawer": {
-      "close": "Fiók bezárása"
-    },
     "link-title": "Tovább a Grafana labs blogjára",
     "news-panel": {
       "body-error-loading-rss-feed": "",
@@ -9753,7 +9767,6 @@
   },
   "recently-deleted": {
     "buttons": {
-      "delete": "Végleges törlés",
       "restore": "Visszaállítás"
     },
     "page": {

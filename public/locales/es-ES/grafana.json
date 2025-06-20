@@ -1065,6 +1065,9 @@
     "error-summary-button": {
       "content-show-all-errors": "Mostrar todos los errores"
     },
+    "errors": {
+      "failedWith": ""
+    },
     "evaluate-every-validation-options": {
       "message": {
         "required": ""
@@ -3267,9 +3270,6 @@
       "search-placeholder": "Buscar carpetas",
       "unknown-error": "Error desconocido"
     },
-    "hard-delete": {
-      "success": "Panel de control {{name}} eliminado"
-    },
     "manage-folder-nav": {
       "alert-rules": "Reglas de alerta",
       "dashboards": "Paneles de control",
@@ -3306,6 +3306,9 @@
     "no-results": {
       "clear": "Borrar la búsqueda y los filtros",
       "text": "No se han encontrado resultados para tu consulta"
+    },
+    "restore": {
+      "success": ""
     },
     "text-this-repository-is-read-only": "Si tienes acceso directo al destino, copia el JSON y pégalo allí."
   },
@@ -4055,6 +4058,7 @@
     },
     "edit-actions": {
       "add": "",
+      "move": "",
       "panel-background": "",
       "panel-description": "",
       "panel-title": "",
@@ -5037,6 +5041,15 @@
         }
       }
     },
+    "delete-provisioned-dashboard-form": {
+      "api-error": "",
+      "cancel-action": "Cancelar",
+      "delete-action": "Eliminar panel de control",
+      "delete-read-only-file-message": "",
+      "deleting": "Eliminando...",
+      "drawer-title": "",
+      "title-this-repository-is-read-only": "Este repositorio es de solo lectura"
+    },
     "description-label": {
       "description": "Descripción"
     },
@@ -5046,6 +5059,9 @@
           "edit-link": "Editar enlace"
         }
       }
+    },
+    "edit-provisioned-dashboard-form": {
+      "success": ""
     },
     "email-list": {
       "aria-label-emailmenu": "Alternar menú de correo electrónico"
@@ -5319,24 +5335,25 @@
       "affected-dashboards_one": "Esta actualización afectará a <1>{{count}} dashboards.</1> Los siguientes dashboards que utilizan el panel se verán afectados:",
       "affected-dashboards_other": "Esta actualización afectará a <1>{{count}} dashboards.</1> Los siguientes dashboards que utilizan el panel se verán afectados:"
     },
+    "save-or-delete-provisioned-dashboard-form": {
+      "dashboard-comment-placeholder-describe-changes-optional": "Añade una nota para describir tus cambios (opcional)",
+      "description-branch-name-in-git-hub": "Nombre de la rama en GitHub",
+      "description-inside-repository": "Ruta del archivo dentro del repositorio (.json o .yaml)",
+      "label-branch": "Rama",
+      "label-comment": "Comentario",
+      "label-path": "Ruta",
+      "label-workflow": "Flujo de trabajo"
+    },
     "save-provisioned-dashboard-form": {
       "api-error": "Error al guardar el panel de control",
-      "api-success": "Cambios en el panel de control guardados",
       "cancel": "Cancelar",
       "cannot-be-saved": "Este dashboard no se puede guardar desde la interfaz de usuario de Grafana porque se ha aprovisionado desde otra fuente. Copia el JSON o guárdalo en un archivo a continuación; luego puedes actualizar el dashboard en la fuente de aprovisionamiento.",
       "copy-json-message": "Si tienes acceso directo al destino, copia el JSON y pégalo allí.",
       "copy-json-to-clipboard": "Copiar JSON al portapapeles",
-      "dashboard-comment-placeholder-describe-changes-optional": "Añade una nota para describir tus cambios (opcional)",
-      "description-branch-name-in-git-hub": "Nombre de la rama en GitHub",
-      "description-inside-repository": "Ruta del archivo dentro del repositorio (.json o .yaml)",
       "file-path": "<0>Ruta del archivo:</0> {{filePath}}",
-      "label-branch": "Rama",
-      "label-comment": "Comentario",
       "label-description": "Descripción",
-      "label-path": "Ruta",
       "label-target-folder": "Carpeta de destino",
       "label-title": "Título",
-      "label-workflow": "Flujo de trabajo",
       "save": "Guardar",
       "save-json-to-file": "Guardar JSON en un archivo",
       "saving": "Guardando…",
@@ -8505,9 +8522,6 @@
     "rss-button": "Últimas entradas del blog"
   },
   "news": {
-    "drawer": {
-      "close": "Cerrar cajón"
-    },
     "link-title": "Ir al blog de Grafana Labs",
     "news-panel": {
       "body-error-loading-rss-feed": "",
@@ -9753,7 +9767,6 @@
   },
   "recently-deleted": {
     "buttons": {
-      "delete": "Eliminar permanentemente",
       "restore": "Restaurar"
     },
     "page": {

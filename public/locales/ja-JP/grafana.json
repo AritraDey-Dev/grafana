@@ -1059,6 +1059,9 @@
     "error-summary-button": {
       "content-show-all-errors": "すべてのエラーを表示"
     },
+    "errors": {
+      "failedWith": ""
+    },
     "evaluate-every-validation-options": {
       "message": {
         "required": ""
@@ -3249,9 +3252,6 @@
       "search-placeholder": "フォルダを検索",
       "unknown-error": "不明なエラー"
     },
-    "hard-delete": {
-      "success": "ダッシュボード、{{name}}が削除されました"
-    },
     "manage-folder-nav": {
       "alert-rules": "アラートルール",
       "dashboards": "ダッシュボード",
@@ -3288,6 +3288,9 @@
     "no-results": {
       "clear": "検索とフィルタをクリア",
       "text": "クエリに一致する結果が見つかりませんでした。"
+    },
+    "restore": {
+      "success": ""
     },
     "text-this-repository-is-read-only": "ターゲットに直接アクセスできる場合は、JSONをコピーしてそこに貼り付けます。"
   },
@@ -4037,6 +4040,7 @@
     },
     "edit-actions": {
       "add": "",
+      "move": "",
       "panel-background": "",
       "panel-description": "",
       "panel-title": "",
@@ -5018,6 +5022,15 @@
         }
       }
     },
+    "delete-provisioned-dashboard-form": {
+      "api-error": "",
+      "cancel-action": "キャンセル",
+      "delete-action": "ダッシュボードを削除する",
+      "delete-read-only-file-message": "",
+      "deleting": "削除中…",
+      "drawer-title": "",
+      "title-this-repository-is-read-only": "このリポジトリは読み取り専用です"
+    },
     "description-label": {
       "description": "説明"
     },
@@ -5027,6 +5040,9 @@
           "edit-link": "リンクの編集"
         }
       }
+    },
+    "edit-provisioned-dashboard-form": {
+      "success": ""
     },
     "email-list": {
       "aria-label-emailmenu": "メールメニューを切り替え"
@@ -5298,24 +5314,25 @@
       "update-all": "すべて更新",
       "affected-dashboards_other": "この更新は<1>{{count}}件のダッシュボード</1>に影響します。このパネルを使用している次のダッシュボードが影響を受けます。"
     },
+    "save-or-delete-provisioned-dashboard-form": {
+      "dashboard-comment-placeholder-describe-changes-optional": "変更内容を説明するメモを追加します（オプション）",
+      "description-branch-name-in-git-hub": "GitHubのブランチ名",
+      "description-inside-repository": "リポジトリ内のファイルパス（.json または .yaml）",
+      "label-branch": "ブランチ",
+      "label-comment": "コメント",
+      "label-path": "パス",
+      "label-workflow": "ワークフロー"
+    },
     "save-provisioned-dashboard-form": {
       "api-error": "ダッシュボードの保存中にエラーが発生しました",
-      "api-success": "ダッシュボードの変更を保存しました",
       "cancel": "キャンセル",
       "cannot-be-saved": "このダッシュボードは別のソースからプロビジョニングされているため、Grafana UIからは保存できません。JSONをコピーするか下記のファイルに保存した上で、プロビジョニング元でダッシュボードを更新できます。",
       "copy-json-message": "ターゲットに直接アクセスできる場合は、JSONをコピーしてそこに貼り付けます。",
       "copy-json-to-clipboard": "JSONをクリップボードにコピー",
-      "dashboard-comment-placeholder-describe-changes-optional": "変更内容を説明するメモを追加します（オプション）",
-      "description-branch-name-in-git-hub": "GitHubのブランチ名",
-      "description-inside-repository": "リポジトリ内のファイルパス（.json または .yaml）",
       "file-path": "<0>ファイルパス：</0> {{filePath}}",
-      "label-branch": "ブランチ",
-      "label-comment": "コメント",
       "label-description": "説明",
-      "label-path": "パス",
       "label-target-folder": "ターゲットフォルダ",
       "label-title": "タイトル",
-      "label-workflow": "ワークフロー",
       "save": "保存",
       "save-json-to-file": "JSONをファイルに保存",
       "saving": "保存中…",
@@ -8479,9 +8496,6 @@
     "rss-button": "最新ブログから"
   },
   "news": {
-    "drawer": {
-      "close": "パネルを閉じる"
-    },
     "link-title": "Grafana Labsブログに移動",
     "news-panel": {
       "body-error-loading-rss-feed": "",
@@ -9722,7 +9736,6 @@
   },
   "recently-deleted": {
     "buttons": {
-      "delete": "完全に削除",
       "restore": "復元"
     },
     "page": {

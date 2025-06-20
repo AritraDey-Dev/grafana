@@ -1059,6 +1059,9 @@
     "error-summary-button": {
       "content-show-all-errors": "Tampilkan semua kesalahan"
     },
+    "errors": {
+      "failedWith": ""
+    },
     "evaluate-every-validation-options": {
       "message": {
         "required": ""
@@ -3249,9 +3252,6 @@
       "search-placeholder": "Cari folder",
       "unknown-error": "Kesalahan tidak diketahui"
     },
-    "hard-delete": {
-      "success": "Dasbor {{name}} dihapus"
-    },
     "manage-folder-nav": {
       "alert-rules": "Aturan peringatan",
       "dashboards": "Dasbor",
@@ -3288,6 +3288,9 @@
     "no-results": {
       "clear": "Hapus pencarian dan filter",
       "text": "Hasil untuk kueri Anda tidak ditemukan"
+    },
+    "restore": {
+      "success": ""
     },
     "text-this-repository-is-read-only": "Jika Anda memiliki akses langsung ke target, salin JSON dan tempel di sana."
   },
@@ -4037,6 +4040,7 @@
     },
     "edit-actions": {
       "add": "",
+      "move": "",
       "panel-background": "",
       "panel-description": "",
       "panel-title": "",
@@ -5018,6 +5022,15 @@
         }
       }
     },
+    "delete-provisioned-dashboard-form": {
+      "api-error": "",
+      "cancel-action": "Batalkan",
+      "delete-action": "Hapus dasbor",
+      "delete-read-only-file-message": "",
+      "deleting": "Menghapus...",
+      "drawer-title": "",
+      "title-this-repository-is-read-only": "Repositori ini hanya dapat dibaca"
+    },
     "description-label": {
       "description": "Deskripsi"
     },
@@ -5027,6 +5040,9 @@
           "edit-link": "Edit tautan"
         }
       }
+    },
+    "edit-provisioned-dashboard-form": {
+      "success": ""
     },
     "email-list": {
       "aria-label-emailmenu": "Alihkan tombol menu email"
@@ -5298,24 +5314,25 @@
       "update-all": "Perbarui semua",
       "affected-dashboards_other": "Pembaruan ini akan memengaruhi <1>{{count}} dasbor.</1> Dasbor berikut yang menggunakan panel akan terpengaruh:"
     },
+    "save-or-delete-provisioned-dashboard-form": {
+      "dashboard-comment-placeholder-describe-changes-optional": "Tambahkan catatan untuk menjelaskan perubahan Anda (opsional)",
+      "description-branch-name-in-git-hub": "Nama cabang di GitHub",
+      "description-inside-repository": "Jalur file di dalam repositori (.json atau .yaml)",
+      "label-branch": "Cabang",
+      "label-comment": "Komentar",
+      "label-path": "Jalur",
+      "label-workflow": "Alur kerja"
+    },
     "save-provisioned-dashboard-form": {
       "api-error": "Kesalahan saat menyimpan dasbor",
-      "api-success": "Perubahan dasbor disimpan",
       "cancel": "Batalkan",
       "cannot-be-saved": "Dasbor ini tidak dapat disimpan dari UI Grafana karena telah disediakan dari sumber lain. Salin JSON atau simpan ke file di bawah ini, lalu Anda dapat memperbarui dasbor Anda di sumber penyediaan.",
       "copy-json-message": "Jika Anda memiliki akses langsung ke target, salin JSON dan tempel di sana.",
       "copy-json-to-clipboard": "Salin JSON ke papan klip",
-      "dashboard-comment-placeholder-describe-changes-optional": "Tambahkan catatan untuk menjelaskan perubahan Anda (opsional)",
-      "description-branch-name-in-git-hub": "Nama cabang di GitHub",
-      "description-inside-repository": "Jalur file di dalam repositori (.json atau .yaml)",
       "file-path": "<0>Jalur file:</0> {{filePath}}",
-      "label-branch": "Cabang",
-      "label-comment": "Komentar",
       "label-description": "Deskripsi",
-      "label-path": "Jalur",
       "label-target-folder": "Folder target",
       "label-title": "Judul",
-      "label-workflow": "Alur kerja",
       "save": "Simpan",
       "save-json-to-file": "Simpan JSON ke file",
       "saving": "Menyimpan...",
@@ -8479,9 +8496,6 @@
     "rss-button": "Terbaru dari blog"
   },
   "news": {
-    "drawer": {
-      "close": "Tutup panel samping"
-    },
     "link-title": "Buka blog Grafana labs",
     "news-panel": {
       "body-error-loading-rss-feed": "",
@@ -9722,7 +9736,6 @@
   },
   "recently-deleted": {
     "buttons": {
-      "delete": "Hapus permanen",
       "restore": "Pulihkan"
     },
     "page": {

@@ -1077,6 +1077,9 @@
     "error-summary-button": {
       "content-show-all-errors": "Pokaż wszystkie błędy"
     },
+    "errors": {
+      "failedWith": ""
+    },
     "evaluate-every-validation-options": {
       "message": {
         "required": ""
@@ -3303,9 +3306,6 @@
       "search-placeholder": "Przeszukaj foldery",
       "unknown-error": "Nieznany błąd"
     },
-    "hard-delete": {
-      "success": "Usunięto panel {{name}}"
-    },
     "manage-folder-nav": {
       "alert-rules": "Reguły alertu",
       "dashboards": "Pulpity",
@@ -3342,6 +3342,9 @@
     "no-results": {
       "clear": "Wyczyść wyszukiwanie i filtry",
       "text": "Nie znaleziono wyników dla tego zapytania"
+    },
+    "restore": {
+      "success": ""
     },
     "text-this-repository-is-read-only": "Jeśli masz bezpośredni dostęp do celu, skopiuj kod JSON i wklej go tam."
   },
@@ -4091,6 +4094,7 @@
     },
     "edit-actions": {
       "add": "",
+      "move": "",
       "panel-background": "",
       "panel-description": "",
       "panel-title": "",
@@ -5075,6 +5079,15 @@
         }
       }
     },
+    "delete-provisioned-dashboard-form": {
+      "api-error": "",
+      "cancel-action": "Anuluj",
+      "delete-action": "Usuń pulpit",
+      "delete-read-only-file-message": "",
+      "deleting": "Usuwanie…",
+      "drawer-title": "",
+      "title-this-repository-is-read-only": "To repozytorium jest tylko do odczytu"
+    },
     "description-label": {
       "description": "Opis"
     },
@@ -5084,6 +5097,9 @@
           "edit-link": "Edytuj link"
         }
       }
+    },
+    "edit-provisioned-dashboard-form": {
+      "success": ""
     },
     "email-list": {
       "aria-label-emailmenu": "Menu przełączania konta e-mail"
@@ -5361,24 +5377,25 @@
       "affected-dashboards_many": "Ta aktualizacja wpłynie na <1>{{count}} pulpitów.</1> Będzie to miało wpływ na następujące pulpity korzystające z panelu:",
       "affected-dashboards_other": "Ta aktualizacja wpłynie na <1>{{count}} pulpitu.</1> Będzie to miało wpływ na następujące pulpity korzystające z panelu:"
     },
+    "save-or-delete-provisioned-dashboard-form": {
+      "dashboard-comment-placeholder-describe-changes-optional": "Dodaj notatkę, aby opisać zmiany (opcjonalnie)",
+      "description-branch-name-in-git-hub": "Nazwa gałęzi w GitHub",
+      "description-inside-repository": "Ścieżka pliku wewnątrz repozytorium (.json lub .yaml)",
+      "label-branch": "Gałąź",
+      "label-comment": "Uwagi",
+      "label-path": "Ścieżka",
+      "label-workflow": "Przepływ pracy"
+    },
     "save-provisioned-dashboard-form": {
       "api-error": "Błąd podczas zapisywania pulpitu",
-      "api-success": "Zapisano zmiany w pulpicie",
       "cancel": "Anuluj",
       "cannot-be-saved": "Nie można zapisać tego pulpitu z poziomu interfejsu Grafany, ponieważ został on skonfigurowany z innego źródła. Skopiuj treść JSON lub zapisz ją w poniższym pliku, a następnie zaktualizuj pulpit w źródle aprowizacji.",
       "copy-json-message": "Jeśli masz bezpośredni dostęp do celu, skopiuj kod JSON i wklej go tam.",
       "copy-json-to-clipboard": "Kopiuj JSON do schowka",
-      "dashboard-comment-placeholder-describe-changes-optional": "Dodaj notatkę, aby opisać zmiany (opcjonalnie)",
-      "description-branch-name-in-git-hub": "Nazwa gałęzi w GitHub",
-      "description-inside-repository": "Ścieżka pliku wewnątrz repozytorium (.json lub .yaml)",
       "file-path": "<0>Ścieżka do pliku:</0> {{filePath}}",
-      "label-branch": "Gałąź",
-      "label-comment": "Uwagi",
       "label-description": "Opis",
-      "label-path": "Ścieżka",
       "label-target-folder": "Katalog docelowy",
       "label-title": "Tytuł",
-      "label-workflow": "Przepływ pracy",
       "save": "Zapisz",
       "save-json-to-file": "Zapisz JSON w pliku",
       "saving": "Zapisywanie…",
@@ -8557,9 +8574,6 @@
     "rss-button": "Najnowsze na blogu"
   },
   "news": {
-    "drawer": {
-      "close": "Zamknij panel"
-    },
     "link-title": "Przejdź na bloga Grafana Labs",
     "news-panel": {
       "body-error-loading-rss-feed": "",
@@ -9815,7 +9829,6 @@
   },
   "recently-deleted": {
     "buttons": {
-      "delete": "Usuń na stałe",
       "restore": "Przywróć"
     },
     "page": {
