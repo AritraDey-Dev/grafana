@@ -1,4 +1,4 @@
-import { useTranslate } from '@grafana/i18n';
+import { t } from '@grafana/i18n';
 import { Alert } from '@grafana/ui';
 import { GrafanaRuleGroupIdentifier } from 'app/types/unified-alerting';
 
@@ -40,8 +40,6 @@ export function GrafanaGroupLoader({
     },
     { pollingInterval: RULE_LIST_POLL_INTERVAL_MS }
   );
-
-  const { t } = useTranslate();
 
   const isLoading = isPromResponseLoading;
   if (isLoading) {

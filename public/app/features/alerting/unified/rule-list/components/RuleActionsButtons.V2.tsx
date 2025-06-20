@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { RequireAtLeastOne } from 'type-fest';
 
-import { Trans } from '@grafana/i18n';
+import { Trans, t } from '@grafana/i18n';
 import { LinkButton, Stack } from '@grafana/ui';
 import AlertRuleMenu from 'app/features/alerting/unified/components/rule-viewer/AlertRuleMenu';
 import { useDeleteModal } from 'app/features/alerting/unified/components/rule-viewer/DeleteModal';
@@ -57,7 +57,6 @@ export function RuleActionsButtons({ compact, rule, promRule, groupIdentifier }:
     prometheusRuleType.grafana.rule(promRule) ? promRule : skipToken,
     AlertRuleAction.Update
   );
-  const { t } = useTranslate();
 
   const canEditRule = (editRuleSupported && editRuleAllowed) || (grafanaEditRuleSupported && grafanaEditRuleAllowed);
 
