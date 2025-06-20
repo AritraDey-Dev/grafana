@@ -1,10 +1,4 @@
-<<<<<<< HEAD
 import { useTranslate } from '@grafana/i18n';
-=======
-import { useMemo } from 'react';
-
-import { t } from '@grafana/i18n';
->>>>>>> origin/main
 import { Alert } from '@grafana/ui';
 import { GrafanaRuleGroupIdentifier } from 'app/types/unified-alerting';
 
@@ -47,16 +41,7 @@ export function GrafanaGroupLoader({
     { pollingInterval: RULE_LIST_POLL_INTERVAL_MS }
   );
 
-<<<<<<< HEAD
   const { t } = useTranslate();
-=======
-  const { matches, promOnlyRules } = useMemo(() => {
-    const promRules = promResponse?.data.groups.at(0)?.rules ?? [];
-    const rulerRules = rulerResponse?.rules ?? [];
-
-    return matchRules(promRules, rulerRules);
-  }, [promResponse, rulerResponse]);
->>>>>>> origin/main
 
   const isLoading = isPromResponseLoading;
   if (isLoading) {
@@ -84,27 +69,7 @@ export function GrafanaGroupLoader({
 
   return (
     <>
-<<<<<<< HEAD
       {promResponse.data.groups.at(0)?.rules.map((promRule) => {
-=======
-      {rulerResponse.rules.map((rulerRule) => {
-        const promRule = matches.get(rulerRule);
-
-        if (!promRule) {
-          return (
-            <GrafanaRuleListItem
-              key={rulerRule.grafana_alert.uid}
-              rule={promRule}
-              rulerRule={rulerRule}
-              groupIdentifier={groupIdentifier}
-              namespaceName={namespaceName}
-              operation={RuleOperation.Creating}
-              showLocation={false}
-            />
-          );
-        }
-
->>>>>>> origin/main
         return (
           <GrafanaRuleListItem
             key={promRule.uid}
@@ -116,21 +81,6 @@ export function GrafanaGroupLoader({
           />
         );
       })}
-<<<<<<< HEAD
-=======
-      {promOnlyRules.map((rule) => (
-        <RuleOperationListItem
-          key={rule.uid}
-          name={rule.name}
-          namespace={namespaceName}
-          group={groupIdentifier.groupName}
-          rulesSource={GrafanaRulesSource}
-          application="grafana"
-          operation={RuleOperation.Deleting}
-          showLocation={false}
-        />
-      ))}
->>>>>>> origin/main
     </>
   );
 }
