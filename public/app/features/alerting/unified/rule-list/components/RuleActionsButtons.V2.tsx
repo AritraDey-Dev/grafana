@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { RequireAtLeastOne } from 'type-fest';
 
-import { Trans, useTranslate } from '@grafana/i18n';
+import { Trans } from '@grafana/i18n';
 import { LinkButton, Stack } from '@grafana/ui';
 import AlertRuleMenu from 'app/features/alerting/unified/components/rule-viewer/AlertRuleMenu';
 import { useDeleteModal } from 'app/features/alerting/unified/components/rule-viewer/DeleteModal';

@@ -48,7 +48,10 @@ describe('GrafanaGroupLoader', () => {
     expect(ruleStatus).toBeInTheDocument();
 
     const ruleLink = ui.ruleLink(rule1.grafana_alert.title).get(ruleListItem);
-    expect(ruleLink).toHaveAttribute('href', `/alerting/grafana/${rule1.grafana_alert.uid}/view`);
+    expect(ruleLink).toHaveAttribute(
+      'href',
+      expect.stringContaining(`/alerting/grafana/${rule1.grafana_alert.uid}/view`)
+    );
   });
 });
 

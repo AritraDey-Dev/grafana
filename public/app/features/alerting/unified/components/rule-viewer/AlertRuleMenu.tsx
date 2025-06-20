@@ -1,7 +1,7 @@
 import { PropsOf } from '@emotion/react';
 
 import { AppEvents } from '@grafana/data';
-import { useTranslate } from '@grafana/i18n';
+import { t } from '@grafana/i18n';
 import { Button, ComponentSize, Dropdown, Menu } from '@grafana/ui';
 import appEvents from 'app/core/app_events';
 import MenuItemPauseRule from 'app/features/alerting/unified/components/MenuItemPauseRule';
@@ -100,7 +100,6 @@ const AlertRuleMenu = ({
   const canExport = (exportSupported && exportAllowed) || (grafanaExportSupported && grafanaExportAllowed);
 
   const ruleExtensionLinks = useRulePluginLinkExtension(promRule, groupIdentifier);
-  const { t } = useTranslate();
 
   const extensionsAvailable = ruleExtensionLinks.length > 0;
 
@@ -189,7 +188,6 @@ interface ExportMenuItemProps {
 }
 
 const ExportMenuItem = ({ identifier }: ExportMenuItemProps) => {
-  const { t } = useTranslate();
   const returnTo = window.location.pathname + window.location.search;
   const url = createRelativeUrl(
     `/alerting/${encodeURIComponent(ruleId.stringifyIdentifier(identifier))}/modify-export`,
